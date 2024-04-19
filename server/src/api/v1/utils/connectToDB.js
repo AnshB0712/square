@@ -3,7 +3,6 @@ const { APIError } = require("./apiError");
 const { MONGO_URL } = require("../../../../config");
 
 const connectToDB = async () => {
-  console.log(MONGO_URL);
   try {
     await mongoose.connect(MONGO_URL);
     console.log("DB Connected");

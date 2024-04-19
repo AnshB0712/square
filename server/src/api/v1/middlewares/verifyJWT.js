@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { APIError } = require("../utils/apiError");
 const { JWT_KEY } = require("../../../../config");
 
-const verifyJwt = (req, res, next) => {
+const verifyJWT = (req, res, next) => {
   // Get token from request headers, query parameters, or cookies
   const token = req.headers.authorization
     ? req.headers.authorization.split(" ")[1]
@@ -27,4 +27,4 @@ const verifyJwt = (req, res, next) => {
   });
 };
 
-module.exports = verifyJwt;
+module.exports = {verifyJWT};

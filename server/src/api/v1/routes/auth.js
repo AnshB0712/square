@@ -1,9 +1,10 @@
 const express = require("express");
-const { registerTeacher } = require("../controllers/auth/teacher");
+const { registerTeacher,setPassword,loginTeacher } = require("../controllers/auth/teacher");
 
 const authRouter = express.Router();
 
 authRouter.post("/register/teacher", registerTeacher);
-authRouter.post("/set-password", registerTeacher);
+authRouter.post("/login/teacher", loginTeacher);
+authRouter.post("/set-password", setPassword);
 
 module.exports = { authRouter };

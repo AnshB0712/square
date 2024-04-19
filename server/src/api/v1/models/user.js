@@ -6,13 +6,21 @@ const user = new mongoose.Schema(
       type: String,
       required: true,
     },
+    academicYear: {
+      type: String
+    },
+    fees:{
+      type: Number
+    },
     roll: {
       type: Number,
       unique: true,
     },
+    standard: {
+      type: mongoose.SchemaTypes.ObjectId,
+    },
     password: {
-      type: String,
-      required: true,
+      type: String
     },
     standardAssigned: [
       {
@@ -36,7 +44,6 @@ const user = new mongoose.Schema(
     },
     mail: {
       type: String,
-      required: true,
       unique: true,
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },

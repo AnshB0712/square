@@ -1,17 +1,14 @@
-const { Error: MongooseError } = require("mongoose");
+const { Error } = require("mongoose");
 const { StatusCodes } = require("http-status-codes");
 const { APIError } = require("../utils/apiError");
 const { AxiosError } = require("axios");
 
 const errorMiddleware = (err, req, res, next) => {
-  console.log(err);
-
+  
+  console.log(err)
+  
   if (err instanceof APIError) {
     return res.status(err.statusCode).json({ message: err.message });
-  }
-
-  if (err instanceof MongooseError) {
-    return res.status(400).json({ message: err.message });
   }
 
   if (err instanceof AxiosError) {
@@ -20,9 +17,7 @@ const errorMiddleware = (err, req, res, next) => {
       .json({ message: err.response?.data?.message });
   }
 
-  res
-    .status(StatusCodes.INTERNAL_SERVER_ERROR)
-    .json({ err: err.data, message: "Something went wrong!" + err.message });
+  res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ err: err.data, message: "Something went wrong!" + err.message });
 };
 
 module.exports = { errorMiddleware };

@@ -1,6 +1,8 @@
+require('express-async-errors')
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const path = require('path')
 const cookieParser = require("cookie-parser");
 
 const corsOptions = {
@@ -8,9 +10,11 @@ const corsOptions = {
   credentials: true,
 };
 
+app.set('views', path.join(__dirname, 'src', 'api', 'v1', 'template'));
 app.set("view engine", "ejs");
 
 app.use(cors(corsOptions));
+app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 app.use(cookieParser());
 
@@ -28,11 +32,11 @@ const { connectToDB } = require("./src/api/v1/utils/connectToDB");
 const { APIError } = require("./src/api/v1/utils/apiError");
 const { PORT } = require("./config");
 
-app.use("/v1", router);
+app.use("/api/v1", router);
 
 // For invalid routes
 app.all("*", (req, res) => {
-  throw new APIError(`Requested URL ${req.path} not found`, 404);
+  throw new APIError(404, `Requested URL ${req.path} not found`);
 });
 
 app.use(errorMiddleware);
