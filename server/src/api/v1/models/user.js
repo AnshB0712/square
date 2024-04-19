@@ -7,31 +7,32 @@ const user = new mongoose.Schema(
       required: true,
     },
     academicYear: {
-      type: String
+      type: String,
     },
-    fees:{
-      type: Number
+    fees: {
+      type: Number,
     },
     roll: {
       type: Number,
-      unique: true,
     },
     standard: {
       type: mongoose.SchemaTypes.ObjectId,
     },
     password: {
-      type: String
+      type: String,
     },
-    standardAssigned: [
-      {
-        standard: {
-          type: mongoose.SchemaTypes.ObjectId,
+    standardAssigned: {
+      type: [
+        {
+          standard: {
+            type: mongoose.SchemaTypes.ObjectId,
+          },
+          subject: {
+            type: mongoose.SchemaTypes.ObjectId,
+          },
         },
-        subject: {
-          type: mongoose.SchemaTypes.ObjectId,
-        },
-      },
-    ],
+      ],
+    },
     phone: {
       type: Number,
       required: true,
@@ -44,7 +45,6 @@ const user = new mongoose.Schema(
     },
     mail: {
       type: String,
-      unique: true,
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },
   },

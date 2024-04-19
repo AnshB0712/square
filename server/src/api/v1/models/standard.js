@@ -5,13 +5,13 @@ const standard = new mongoose.Schema({
     type: String,
     required: true,
   },
-  batch: {
-    type: String,
-    default: "1",
-  },
   field: {
     type: String,
     enum: ["SCIENCE", "COMMERCE", "NONE"],
     default: "NONE",
   },
 });
+
+const Standard = mongoose.model("standard", standard);
+
+module.exports = { Standard };

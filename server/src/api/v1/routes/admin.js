@@ -1,11 +1,22 @@
-const express = require("express")
-const adminRouter = express.Router()
+const express = require("express");
+const adminRouter = express.Router();
+const { validate } = require("../middlewares/validate.js");
+const { addStudent } = require("../controllers/admin/addStudent.js");
+const {
+  addStudent: validateStudent,
+  assignClassSubject: validateAssign,
+} = require("../validations/admin.validation.js");
+const {
+  assignClassSubject,
+} = require("../controllers/admin/assignClassSubject.js");
 
-const { addStudent } = require("../controllers/admin/addStudent.js")
-
-adminRouter.post("/add-student",addStudent)
-
+adminRouter.post("/add-student", validate(validateStudent), addStudent);
+adminRouter.post(
+  "/assign-class-subject/:teacherId",
+  validate(validateAssign),
+  assignClassSubject
+);
 
 module.exports = {
-  adminRouter
-}
+  adminRouter,
+};
