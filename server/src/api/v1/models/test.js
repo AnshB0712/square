@@ -10,6 +10,10 @@ const test = new mongoose.Schema(
       type: String,
       required: true,
     },
+    on: {
+      type: Date,
+      required: true
+    },
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
       reference: "user",

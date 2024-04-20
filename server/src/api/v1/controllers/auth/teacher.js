@@ -80,7 +80,7 @@ const loginTeacher = async (req,res) => {
     role: user.role,
     name: user.name
   },JWT_KEY,{
-    expiresIn: '3600'
+    expiresIn: '12d'
   })
   
   res.status(StatusCodes.OK).json({
