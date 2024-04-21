@@ -1,0 +1,19 @@
+# Image Handling Best Practices
+
+## Introduction
+
+This document outlines best practices for optimizing image handling to improve performance and efficiency.
+
+## Considerations for Better Performance
+
+### 1. Unload Image Upload as an Async Task Offload from Main Server
+
+When handling image uploads, offloading the task to an asynchronous process can improve the performance of the main server. By decoupling the image upload process, the main server can remain responsive to other requests, leading to better overall system performance.
+
+### 2. Use Meta-Data for Images to Minimize Bucket Population
+
+Utilizing meta-data for images can help minimize the number of images stored in the bucket. Instead of storing multiple copies of the same image with different attributes, such as size or format, store a single high-resolution image and generate the required variants dynamically using meta-data. This approach reduces storage costs and simplifies image management.
+
+## Conclusion
+
+By implementing the above considerations, we can enhance the performance and efficiency of image handling in our application, resulting in a better user experience and optimized resource utilization.

@@ -4,9 +4,8 @@ const { APIError } = require("../utils/apiError");
 const { AxiosError } = require("axios");
 
 const errorMiddleware = (err, req, res, next) => {
-  
-  console.log(err)
-  
+  console.log(err);
+
   if (err instanceof APIError) {
     return res.status(err.statusCode).json({ message: err.message });
   }
@@ -17,7 +16,9 @@ const errorMiddleware = (err, req, res, next) => {
       .json({ message: err.response?.data?.message });
   }
 
-  res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ err: err.data, message: "Something went wrong!" + err.message });
+  res
+    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+    .json({ InterlError: true, messgae: err.message });
 };
 
 module.exports = { errorMiddleware };

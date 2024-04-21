@@ -1,35 +1,41 @@
 const Joi = require("joi");
 const { objectId } = require("./custom.validation");
 
-
 const validateTest = {
-  body: joi.object().keys({
-    name: joi.string().required(),
-    description: joi.string().required(),
-    on: joi.date().required(),
-    forStandard: joi.string().custom(objectId).required(),
-  })
-}
+  body: Joi.object()
+    .keys({
+      name: Joi.string().required(),
+      description: Joi.string().required(),
+      on: Joi.date().required(),
+      forStandard: Joi.string().custom(objectId).required(),
+      forSubject: Joi.string().custom(objectId).required(),
+    })
+    .required(),
+};
 
 const validateDeleteTest = {
   params: {
-    testId: joi.string().custom(objectId).required()
-  }
+    testId: Joi.string().custom(objectId).required(),
+  },
+};
 
 const validateUpdateTest = {
   params: {
-    testId: joi.string().custom(objectId).required()
+    testId: Joi.string().custom(objectId).required(),
   },
-  body: joi.object().keys({
-    name: joi.string(),
-    description: joi.string(),
-    on: joi.date(),
-    forStandard: joi.string().custom(objectId),
-  }).min(1)
-}
+  body: Joi.object()
+    .keys({
+      name: Joi.string(),
+      description: Joi.string(),
+      on: Joi.date(),
+      forStandard: Joi.string().custom(objectId),
+      forSubject: Joi.string().custom(objectId),
+    })
+    .required(),
+};
 
 module.exports = {
   validateTest,
   validateDeleteTest,
-  validateUpdateTest
-}
+  validateUpdateTest,
+};

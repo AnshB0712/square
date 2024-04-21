@@ -1,25 +1,24 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const marksheet = new mongoose.Schema({
   test: {
-    type: mongoose.SchemaTypes.ObjectId
-    ,
+    type: mongoose.SchemaTypes.ObjectId,
     reference: "test",
     required: true,
-  }
+  },
   fullMarksOfTest: {
     type: Number,
-    required: true
+    required: true,
   },
   sheet: {
-    type: {
-      "ref to user": Number
-    }
-  }
-})
+    type: Map,
+    of: Number,
+    default: {},
+  },
+});
 
-const Marksheet = mongoose.model("marksheet",marksheet)
+const Marksheet = mongoose.model("marksheet", marksheet);
 
 module.exports = {
-   Marksheet
-}
+  Marksheet,
+};

@@ -2,20 +2,22 @@ const { StatusCodes } = require("http-status-codes");
 const { User } = require("../../models/user");
 const { APIError } = require("../../middlewares/errorMiddleware.js");
 const { sendMailToUser } = require("../../services/mail");
-const { hashPassword,comparePassword } = require("../../utils/encryptPassword");
+const {
+  hashPassword,
+  comparePassword,
+} = require("../../utils/encryptPassword");
 const { BACKEND_URL, JWT_KEY } = require("../../../../../config");
 const jwt = require("jsonwebtoken");
 
 const registerTeacher = async (req, res) => {
-    
-  const { name, phone, mail, role } = req.body;
+  const { name, phone, mail, role, standardAssigned } = req.body;
 
   const user = await User.create({
     name,
     phone,
     mail,
     role,
-  //  standardAssigned,
+    standardAssigned,
   });
 
   const token = jwt.sign(user.toObject(), JWT_KEY, {
@@ -35,7 +37,6 @@ const registerTeacher = async (req, res) => {
     message: "teacher registered successfuly",
     data: [],
   });
-  
 };
 
 const setPassword = async (req, res) => {
@@ -54,42 +55,69 @@ const setPassword = async (req, res) => {
   res.render("successpassword.ejs");
 };
 
-const loginTeacher = async (req,res) => {
-  const {uniqueField, password} = req.body
+const loginTeacher = async (req, res) => {
+  const { uniqueField, password } = req.body;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const isEmail = emailRegex.test(uniqueField)
+  const isEmail = emailRegex.test(uniqueField);
   let user;
-  
-  if(isEmail) user = await User.findOne({
-    mail: uniqueField
-  })
-  else user = await User.findOne({
-    phone: uniqueField
-  })
-  
-  if(!user) throw new APIError(StatusCodes.BAD_REQUEST,"You are not registered with us.")
-  
-  console.log(user)
-  
-  const isPasswordMatched = comparePassword(password,user.password)
-  
-  if(!isPasswordMatched) throw new APIError(StatusCodes.BAD_REQUEST,"Password is incorrect.")
-  
-  const token = jwt.sign({
-    _id: user._id,
-    role: user.role,
-    name: user.name
-  },JWT_KEY,{
-    expiresIn: '12d'
-  })
-  
+
+  if (isEmail)
+    user = await User.findOne({
+      mail: uniqueField,
+    });
+  else
+    user = await User.findOne({
+      phone: uniqueField,
+    });
+
+  if (!user)
+    throw new APIError(
+      StatusCodes.BAD_REQUEST,
+      "You are not registered with us."
+    );
+
+  const isPasswordMatched = comparePassword(password, user.password);
+
+  if (!isPasswordMatched)
+    throw new APIError(StatusCodes.BAD_REQUEST, "Password is incorrect.");
+
+  const refresh = jwt.sign(
+    {
+      _id: user._id,
+      role: user.role,
+      name: user.name,
+    },
+    JWT_KEY,
+    {
+      expiresIn: "365d",
+    }
+  );
+
+  const token = jwt.sign(
+    {
+      _id: user._id,
+      role: user.role,
+      name: user.name,
+    },
+    JWT_KEY,
+    {
+      expiresIn: "3600",
+    }
+  );
+
+  res.cookie("refresh", refresh, {
+    httpOnly: true, // Cookie is accessible only through the HTTP protocol, not JavaScript
+    secure: true, // Cookie is only sent over HTTPS
+    sameSite: "strict", // Cookie is sent only for same-site requests by default
+  });
+
   res.status(StatusCodes.OK).json({
     success: true,
     data: {
-      token
+      token,
     },
-    message: "You are logged in."
-  })
-}
+    message: "You are logged in.",
+  });
+};
 
 module.exports = { registerTeacher, setPassword, loginTeacher };

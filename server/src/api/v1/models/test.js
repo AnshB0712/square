@@ -12,7 +12,7 @@ const test = new mongoose.Schema(
     },
     on: {
       type: Date,
-      required: true
+      required: true,
     },
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -24,8 +24,13 @@ const test = new mongoose.Schema(
       reference: "standard",
       required: true,
     },
+    forSubject: {
+      type: mongoose.SchemaTypes.ObjectId,
+      reference: "subject",
+      required: true,
+    },
     url: {
-      type: String,
+      type: [String],
     },
   },
   { timestamps: true }
