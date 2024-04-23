@@ -12,9 +12,22 @@ const loginStudent = async (req, res) => {
     );
 
   // CREATE SESSION
+  const token = jwt.sign(user,JWT_KEY,{
+    expireIn: '1d'
+  })
+  const refresh = jwt.sign(user,JWT_KEY,{
+    expireIn:'30d'
+  })
+  
+  res.cookie('refresh' refresh,{
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict'
+  })
 
   res.status(StatusCodes.OK).json({
     success: true,
+    data:{token}
     message: "Your session is created.",
   });
 };

@@ -10,13 +10,13 @@ const { BACKEND_URL, JWT_KEY } = require("../../../../../config");
 const jwt = require("jsonwebtoken");
 
 const registerTeacher = async (req, res) => {
-  const { name, phone, mail, role, standardAssigned } = req.body;
+  const { name, phone, mail, standardAssigned } = req.body;
 
   const user = await User.create({
     name,
     phone,
     mail,
-    role,
+    role: ["TEACHER"],
     standardAssigned,
   });
 
