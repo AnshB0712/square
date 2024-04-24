@@ -1,4 +1,7 @@
 const { User } = require("../../models/user");
+const { APIError } = require("../../utils/apiError.js");
+const { JWT_KEY } = require("../../../../../config");
+const jwt = require('jsonwebtoken')
 
 const loginStudent = async (req, res) => {
   const { roll } = req.body;
@@ -19,7 +22,7 @@ const loginStudent = async (req, res) => {
     expireIn:'30d'
   })
   
-  res.cookie('refresh' refresh,{
+  res.cookie('refresh', refresh,{
     httpOnly: true,
     secure: true,
     sameSite: 'strict'
@@ -27,8 +30,8 @@ const loginStudent = async (req, res) => {
 
   res.status(StatusCodes.OK).json({
     success: true,
-    data:{token}
-    message: "Your session is created.",
+    data:{token},
+    message: "Your session is created."
   });
 };
 

@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const { User } = require("../../models/user");
-const { APIError } = require("../../middlewares/errorMiddleware.js");
+const { APIError } = require("../../utils/apiError.js");
 const { sendMailToUser } = require("../../services/mail");
 const {
   hashPassword,

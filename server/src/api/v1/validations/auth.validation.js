@@ -5,7 +5,7 @@ const validateLoginAdmin = {
   body: Joi.object()
     .keys({
       phone: Joi.number().required(),
-      pasword: Joi.string().required(),
+      password: Joi.string().required(),
     })
     .required(),
 };
@@ -21,7 +21,7 @@ const validateLoginStudent = {
 const validateLoginTeacher = {body: Joi.object()
     .keys({
       uniqueField: Joi.number().required(),
-      pasword: Joi.string().required(),
+      password: Joi.string().required(),
     })
     .required(),
   

@@ -2,15 +2,26 @@ const express = require("express");
 const {
   registerTeacher,
   setPassword,
-  loginTeacher,
+  loginTeacher
 } = require("../controllers/auth/teacher");
+const {
+  loginStudent
+} = require("../controllers/auth/student");
+const { validate } = require("../middlewares/validate.js");
 const { loginAdmin } = require("../controllers/auth/admin");
 const { verifyRole } = require("../middlewares/verifyRole");
 const { refresh } = require("../controllers/auth/refreshtoken");
 
+const {
+  validateLoginAdmin,
+  validateLoginTeacher,
+  validateRegisterTeacher,
+  validateLoginStudent
+} = require("../validations/auth.validation.js");
+
 const authRouter = express.Router();
 
-authRouter.post("/refresh-session", refresh);
+authRouter.get("/refresh-session", refresh);
 authRouter.post("/login/admin",
 validate(validateLoginAdmin),
 loginAdmin);
