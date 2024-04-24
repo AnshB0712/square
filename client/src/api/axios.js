@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-const customAxios = axios.create({
-  baseURL: `${FRONTEND_URL}`,
+export const customAxios = axios.create({
+  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/v1`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
-
-export default customAxios;
