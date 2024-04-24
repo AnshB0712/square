@@ -7,7 +7,9 @@ const errorMiddleware = (err, req, res, next) => {
   console.log(err);
 
   if (err instanceof APIError) {
-    return res.status(err.statusCode).json({ message: err.message });
+    return res
+      .status(err.statusCode)
+      .json({ message: err.message, success: false });
   }
 
   if (err instanceof AxiosError) {

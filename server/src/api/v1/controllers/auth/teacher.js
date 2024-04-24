@@ -115,6 +115,8 @@ const loginTeacher = async (req, res) => {
     success: true,
     data: {
       token,
+      role: user.role,
+      name: user.name,
     },
     message: "You are logged in.",
   });

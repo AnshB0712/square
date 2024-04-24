@@ -1,7 +1,7 @@
 const { User } = require("../../models/user");
 const { APIError } = require("../../utils/apiError.js");
 const { JWT_KEY } = require("../../../../../config");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 const loginStudent = async (req, res) => {
   const { roll } = req.body;
@@ -14,24 +14,23 @@ const loginStudent = async (req, res) => {
       "You are not registered with us."
     );
 
-  // CREATE SESSION
-  const token = jwt.sign(user,JWT_KEY,{
-    expireIn: '1d'
-  })
-  const refresh = jwt.sign(user,JWT_KEY,{
-    expireIn:'30d'
-  })
-  
-  res.cookie('refresh', refresh,{
+  const token = jwt.sign(user, JWT_KEY, {
+    expireIn: "1d",
+  });
+  const refresh = jwt.sign(user, JWT_KEY, {
+    expireIn: "30d",
+  });
+
+  res.cookie("refresh", refresh, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict'
-  })
+    sameSite: "strict",
+  });
 
   res.status(StatusCodes.OK).json({
     success: true,
-    data:{token},
-    message: "Your session is created."
+    data: { token, role: user.role, name: user.name },
+    message: "Your session is created.",
   });
 };
 

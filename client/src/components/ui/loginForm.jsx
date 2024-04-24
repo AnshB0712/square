@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useLogin } from "../../hooks/mutation/useLogin.jsx"
 import {
   Card,
   CardContent,
@@ -19,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useLogin } from "../../hooks/mutation/useLogin.jsx";
 
 const FormFieldRender = ({ role, register, errors }) => {
   let content;
@@ -94,12 +95,11 @@ const FormFieldRender = ({ role, register, errors }) => {
           <div className="grid gap-2">
             <Label htmlFor="roll">Roll No.</Label>
             <Input
-              {...register("roll", { required: "Roll number is required." })}
+              {...register("roll", { required: true })}
               id="roll"
               name="roll"
               type="number"
               placeholder="000000"
-              required
               className={`${
                 errors["roll"] ? "border-red-600 text-red-600" : ""
               }`}
@@ -120,8 +120,27 @@ const FormFieldRender = ({ role, register, errors }) => {
 
 export function LoginForm() {
   const [role, setRole] = useState("");
-  const { register, handleSubmit, reset, formState } = useForm();
-  const login = useLogin(`auth/login/${role}`)
+  const { register, handleSubmit, reset, formState, setError, clearErrors } =
+    useForm();
+  const navigate = useNavigate();
+  const login = useLogin(`auth/login/${role}`);
+
+  const handleLogin = async (details) => {
+    clearErrors();
+    login.mutate(
+      {
+        details,
+      },
+      {
+        onError: (e) =>
+          setError("formError", {
+            type: "custom",
+            message: e.response.data.message,
+          }),
+        onSuccess: () => navigate("/dashboard"),
+      }
+    );
+  };
 
   useEffect(() => {
     reset();
@@ -156,9 +175,7 @@ export function LoginForm() {
           <form
             className="grid gap-3"
             onSubmit={(e) => {
-              handleSubmit((e) => {
-                login.mutate({data:e})
-              })(e);
+              handleSubmit(handleLogin)(e);
             }}
           >
             <FormFieldRender
@@ -166,10 +183,19 @@ export function LoginForm() {
               register={register}
               errors={formState.errors}
             />
-            
-            {}
-            
-            <Button className="w-full my-2" size="lg" type="submit">
+
+            {formState.errors["formError"] && (
+              <p className="text-[0.8rem] text-red-600 text-center">
+                {formState.errors["formError"].message}
+              </p>
+            )}
+
+            <Button
+              disabled={!role}
+              className="w-full my-2"
+              size="lg"
+              type="submit"
+            >
               Login
             </Button>
           </form>

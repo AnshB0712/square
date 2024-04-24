@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logo from "../../assets/logo.svg";
 import { Link, Outlet } from "react-router-dom";
 
-export function Dashboard() {
+export function Layout() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex justify-between h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -126,7 +126,9 @@ export function Dashboard() {
           </DropdownMenu>
         </div>
       </header>
-      <Outlet />
+      <main className="p-4">
+        <Outlet />
+      </main>
     </div>
   );
 }
