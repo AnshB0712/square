@@ -53,6 +53,20 @@ const Dashboard = () => {
               </Button>
             </CardFooter>
           </Card>
+          <Card className="sm:col-span-2 min-w-[90%]">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium">Create Test</CardTitle>
+              <CardDescription className="max-w-lg text-balance leading-relaxed">
+                Create new test for a subject for your class and upload
+                marksheet for student
+              </CardDescription>
+            </CardHeader>
+            <CardFooter>
+              <Button onClick={() => navigate("add-teacher")}>
+                Add New Test
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
       </article>
       <Outlet />

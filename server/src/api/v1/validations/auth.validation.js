@@ -18,13 +18,13 @@ const validateLoginStudent = {
     .required(),
 };
 
-const validateLoginTeacher = {body: Joi.object()
+const validateLoginTeacher = {
+  body: Joi.object()
     .keys({
       uniqueField: Joi.number().required(),
       password: Joi.string().required(),
     })
     .required(),
-  
 };
 
 const validateRegisterTeacher = {
@@ -33,12 +33,15 @@ const validateRegisterTeacher = {
       name: Joi.string().required(),
       mail: Joi.string().required(),
       phone: Joi.number().required(),
-      standardAssigned: Joi.array().items(
-    Joi.object({
-      standard: Joi.string().custom(objectId).required(),
-      subject: Joi.string().custom(objectId).required(), 
-    })
-  ).required(),
+      standardAssigned: Joi.array()
+        .items(
+          Joi.object({
+            index: Joi.number(),
+            standard: Joi.string().custom(objectId).required(),
+            subject: Joi.string().custom(objectId).required(),
+          })
+        )
+        .required(),
     })
     .required(),
 };
@@ -47,5 +50,5 @@ module.exports = {
   validateRegisterTeacher,
   validateLoginTeacher,
   validateLoginStudent,
-  validateLoginAdmin
+  validateLoginAdmin,
 };

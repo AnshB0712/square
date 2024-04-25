@@ -18,9 +18,14 @@ const errorMiddleware = (err, req, res, next) => {
       .json({ message: err.response?.data?.message });
   }
 
+  if (err.code === 11000)
+    err.message = `${
+      Object.keys(err.keyPattern)[0]
+    } is already in use. enter different value`;
+
   res
     .status(StatusCodes.INTERNAL_SERVER_ERROR)
-    .json({ InterlError: true, messgae: err.message });
+    .json({ InterlError: true, message: err.message });
 };
 
 module.exports = { errorMiddleware };

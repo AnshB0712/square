@@ -16,6 +16,7 @@ import { PlusIcon, MinusIcon } from "lucide-react";
 import useSubjects from "../../../hooks/query/useSubjects";
 import { useEffect, useState } from "react";
 import useAddTeacher from "../../../hooks/mutation/useAddTeacher";
+import { Loading } from "../../layout/loading";
 
 const SelectPicker = ({
   standards,
@@ -94,6 +95,7 @@ const StandardAssigned = ({ standards, subjects, onChange }) => {
 
   useEffect(() => {
     if (value.length) onChange(value);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
@@ -145,19 +147,23 @@ const AddTeacher = () => {
   const addTeacher = useAddTeacher();
 
   const handleAddTeacher = (details) => {
-    if (!details.assignedStandards) {
-      setError("assignedStandards", {
+    if (!details.standardAssigned) {
+      setError("standardAssigned", {
         type: "custom",
         required: true,
       });
       return;
     }
+
+    console.log(details);
+
     addTeacher.mutate(details, {
-      onError: (e) =>
+      onError: (e) => {
         setError("formError", {
           type: "custom",
           message: e.response.data.message,
-        }),
+        });
+      },
       onSuccess: () => {
         navigate(-1);
       },
@@ -174,15 +180,7 @@ const AddTeacher = () => {
               Fill out the form to add a new teacher.
             </p>
           </div>
-          <form
-            onSubmit={(e) =>
-              handleSubmit((d) => {
-                clearErrors();
-                handleAddTeacher(d);
-              })(e)
-            }
-            className="space-y-4"
-          >
+          <form onSubmit={handleSubmit(handleAddTeacher)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
@@ -233,9 +231,28 @@ const AddTeacher = () => {
               </p>
             )}
 
-            <Button className="w-full" type="submit">
-              Add Teacher
-            </Button>
+            <div className="space-y-3 my-3">
+              <Button
+                disabled={addTeacher.isLoading}
+                className="w-full"
+                onClick={() => {
+                  clearErrors();
+                }}
+                type="submit"
+              >
+                {addTeacher.isLoading ? <Loading /> : "Add Teacher"}
+              </Button>
+              <Button
+                disabled={addTeacher.isLoading}
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </form>
         </div>
       </AlertDialogContent>

@@ -12,7 +12,7 @@ const useAddTeacher = () => {
   const mutate = useMutation({
     mutationFn: (details) => addTeacher(details, axios),
     onSuccess: () => {
-      toast("Student has been created", {
+      toast("Teacher has been registered", {
         description: `${new Intl.DateTimeFormat("en-GB", {
           dateStyle: "full",
           timeStyle: "long",
