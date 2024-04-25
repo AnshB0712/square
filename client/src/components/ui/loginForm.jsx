@@ -126,7 +126,6 @@ export function LoginForm() {
   const login = useLogin(`auth/login/${role}`);
 
   const handleLogin = async (details) => {
-    clearErrors();
     login.mutate(
       {
         details,
@@ -175,6 +174,7 @@ export function LoginForm() {
           <form
             className="grid gap-3"
             onSubmit={(e) => {
+              clearErrors();
               handleSubmit(handleLogin)(e);
             }}
           >

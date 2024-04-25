@@ -101,7 +101,7 @@ const loginTeacher = async (req, res) => {
     },
     JWT_KEY,
     {
-      expiresIn: "3600",
+      expiresIn: "1d",
     }
   );
 

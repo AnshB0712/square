@@ -6,7 +6,7 @@ const standards = async (req, res) => {
 
   return res.status(StatusCodes.OK).json({
     success: true,
-    data: standards,
+    standards,
   });
 };
 

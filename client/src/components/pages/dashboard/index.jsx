@@ -48,7 +48,9 @@ const Dashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardFooter>
-              <Button>Add New Teacher</Button>
+              <Button onClick={() => navigate("add-teacher")}>
+                Add New Teacher
+              </Button>
             </CardFooter>
           </Card>
         </div>

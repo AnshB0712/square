@@ -4,6 +4,7 @@ import { PersistUser } from "./components/layout/persistUser.jsx";
 import { LoginForm } from "./components/ui/loginForm";
 import Dashboard from "./components/pages/dashboard/index.jsx";
 import AddStudent from "./components/pages/dashboard/addStudent.jsx";
+import AddTeacher from "./components/pages/dashboard/addTeacher.jsx";
 
 const App = () => {
   return (
@@ -14,7 +15,7 @@ const App = () => {
           <Route element={<PersistUser />}>
             <Route path="/dashboard" element={<Dashboard />}>
               <Route path="add-student" element={<AddStudent />} />
-              <Route path="add-teacher" element={<p>ADD TEACHER</p>} />
+              <Route path="add-teacher" element={<AddTeacher />} />
             </Route>
           </Route>
         </Route>

@@ -39,6 +39,24 @@ const loginAdmin = async (req, res) => {
     }
   );
 
+  const refresh = jwt.sign(
+    {
+      _id: user._id,
+      role: user.role,
+      name: user.name,
+    },
+    JWT_KEY,
+    {
+      expiresIn: "365d",
+    }
+  );
+
+  res.cookie("refresh", refresh, {
+    httpOnly: true, // Cookie is accessible only through the HTTP protocol, not JavaScript
+    secure: true, // Cookie is only sent over HTTPS
+    sameSite: "strict", // Cookie is sent only for same-site requests by default
+  });
+
   res.status(StatusCodes.OK).json({
     success: true,
     data: {
