@@ -17,6 +17,7 @@ const user = new mongoose.Schema(
     },
     standard: {
       type: mongoose.SchemaTypes.ObjectId,
+      ref: "Standard",
     },
     password: {
       type: String,
@@ -26,9 +27,11 @@ const user = new mongoose.Schema(
         {
           standard: {
             type: mongoose.SchemaTypes.ObjectId,
+            ref: "Standard",
           },
           subject: {
             type: mongoose.SchemaTypes.ObjectId,
+            ref: "Subject",
           },
         },
       ],
@@ -51,6 +54,6 @@ const user = new mongoose.Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model("user", user);
+const User = mongoose.model("User", user);
 
 module.exports = { User };

@@ -6,21 +6,26 @@ const { APIError } = require("../../utils/apiError.js");
 const createTest = async (req, res) => {
   const user = req.user;
   const files = req.files;
-  const { name, description, forStandard, on, forSubject, assignedTo } =
-    req.body;
+
+  let { name, description, forStandard, on, forSubject, assignedTo } = req.body;
+  let media = [];
 
   if (!assignedTo) assignedTo = user._id;
 
-  const url = await uploadMultiMedia(files);
+  if (files) {
+    const urls = await uploadMultiMedia(files);
+    media = urls.map((u) => u.secure_url);
+  }
 
   const t = await Test.create({
     name,
     description,
     forStandard,
     forSubject,
+    assignedTo,
     createdBy: user._id,
     on,
-    url: url.map((u) => u.secure_url),
+    url: media,
   });
 
   res.status(StatusCodes.CREATED).json({
@@ -95,8 +100,39 @@ const deleteTest = async (req, res) => {
   });
 };
 
+const getTests = async (req, res) => {
+  try {
+    const user = req.user;
+    const academicYear = req.academicYear;
+    let t;
+
+    if (user.role.includes("ADMIN")) {
+      t = await Test.find({ academicYear }).populate("createdBy").lean();
+    } else {
+      t = await Test.find({
+        academicYear,
+        createdBy: user._id,
+        assignedTo: user._id,
+      })
+        .populate("forStandard")
+        .populate("forSubject")
+        .populate("assignedTo")
+        .lean();
+    }
+
+    res.status(200).json({
+      success: true,
+      data: t,
+      message: "Test Found.",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createTest,
   updateTest,
   deleteTest,
+  getTests,
 };

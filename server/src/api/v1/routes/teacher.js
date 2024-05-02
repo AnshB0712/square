@@ -5,6 +5,7 @@ const {
   createTest,
   updateTest,
   deleteTest,
+  getTests,
 } = require("../controllers/teacher/test.js");
 const { validate } = require("../middlewares/validate");
 const {
@@ -20,9 +21,10 @@ const upload = multer({ storage: storage, fileFilter });
 
 const MAX_MEDIA_COUNT = 6;
 
+teacherRouter.get("/tests", getTests);
 teacherRouter.post(
   "/new-test",
-  upload.array("file", MAX_MEDIA_COUNT),
+  upload.array("file[]", MAX_MEDIA_COUNT),
   validate(validateTest),
   createTest
 );

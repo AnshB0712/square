@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { customAxios } from "../../api/axios.js";
 import { SplashScreen } from "./splashScreen.jsx";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuthCtx } from "../../context/authContext.jsx";
 
 const refreshSession = async () => {
@@ -21,8 +21,7 @@ export const PersistUser = () => {
   if (isLoading) return <SplashScreen />;
 
   if (isError) {
-    console.error("Error refreshing token");
-    return null;
+    return <Navigate to={"/"} />;
   }
 
   return <Outlet />;

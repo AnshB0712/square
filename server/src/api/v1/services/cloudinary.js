@@ -54,7 +54,8 @@ const uploadMultiMedia = async (files) => {
 
     return results;
   } catch (err) {
-    throw new Error(`Error uploading media to Cloudinary :->> ${err.messaage}`);
+    console.log(err);
+    throw new Error(`Error uploading media to Cloudinary :->> ${err.message}`);
   }
 };
 

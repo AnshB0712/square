@@ -55,7 +55,7 @@ export function Layout() {
             Analytics
           </Link>
         </nav>
-        <Sheet>
+        <Sheet open={false}>
           <SheetTrigger asChild>
             <Button
               variant="outline"
@@ -118,10 +118,15 @@ export function Layout() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Button
+                  variant="ghost"
+                  className="w-full bg-red-500 text-white"
+                  size="sm"
+                >
+                  Logout
+                </Button>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

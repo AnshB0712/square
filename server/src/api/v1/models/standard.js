@@ -12,6 +12,6 @@ const standard = new mongoose.Schema({
   },
 });
 
-const Standard = mongoose.model("standard", standard);
+const Standard = mongoose.model("Standard", standard);
 
 module.exports = { Standard };

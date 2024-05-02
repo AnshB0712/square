@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const marksheet = new mongoose.Schema({
   test: {
     type: mongoose.SchemaTypes.ObjectId,
-    reference: "test",
+    reference: "Test",
+    required: true,
+  },
+  academicYear: {
+    type: String,
     required: true,
   },
   fullMarksOfTest: {
@@ -17,7 +21,7 @@ const marksheet = new mongoose.Schema({
   },
 });
 
-const Marksheet = mongoose.model("marksheet", marksheet);
+const Marksheet = mongoose.model("Marksheet", marksheet);
 
 module.exports = {
   Marksheet,

@@ -22,6 +22,11 @@ const verifyJWT = (req, res, next) => {
         "Failed to authenticate token"
       );
     }
+
+    const currentYear = new Date().getFullYear();
+    const academicYear = `${currentYear}-${currentYear + 1}`;
+
+    req.academicYear = academicYear;
     req.user = decoded;
     next();
   });

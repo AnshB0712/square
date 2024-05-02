@@ -7,6 +7,7 @@ const validateTest = {
       name: Joi.string().required(),
       description: Joi.string().required(),
       on: Joi.date().required(),
+      assignedTo: Joi.string().custom(objectId),
       forStandard: Joi.string().custom(objectId).required(),
       forSubject: Joi.string().custom(objectId).required(),
     })
