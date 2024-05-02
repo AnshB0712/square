@@ -5,6 +5,7 @@ import { LoginForm } from "./components/ui/loginForm";
 import Dashboard from "./components/pages/dashboard/index.jsx";
 import AddStudent from "./components/pages/dashboard/addStudent.jsx";
 import AddTeacher from "./components/pages/dashboard/addTeacher.jsx";
+import AddTest from "./components/pages/dashboard/addTest.jsx";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />}>
               <Route path="add-student" element={<AddStudent />} />
               <Route path="add-teacher" element={<AddTeacher />} />
+              <Route path="add-test" element={<AddTest />} />
             </Route>
           </Route>
         </Route>

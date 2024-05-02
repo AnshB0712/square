@@ -14,6 +14,11 @@ const test = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    assignedTo: {
+      type: mongoose.SchemaTypes.ObjectId,
+      reference: "user",
+      required: true,
+    },
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
       reference: "user",

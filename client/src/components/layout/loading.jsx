@@ -1,6 +1,6 @@
 export const Loading = ({ size = 6, className }) => {
   return (
-    <div className={className}>
+    <span className={className}>
       <svg
         className={`w-${size} h-${size} text-gray-300 animate-spin`}
         viewBox="0 0 64 64"
@@ -25,6 +25,6 @@ export const Loading = ({ size = 6, className }) => {
           className="text-gray-900"
         ></path>
       </svg>
-    </div>
+    </span>
   );
 };

@@ -6,7 +6,10 @@ const { APIError } = require("../../utils/apiError.js");
 const createTest = async (req, res) => {
   const user = req.user;
   const files = req.files;
-  const { name, description, forStandard, on, forSubject } = req.body;
+  const { name, description, forStandard, on, forSubject, assignedTo } =
+    req.body;
+
+  if (!assignedTo) assignedTo = user._id;
 
   const url = await uploadMultiMedia(files);
 
