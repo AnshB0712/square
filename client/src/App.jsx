@@ -6,6 +6,8 @@ import Dashboard from "./components/pages/dashboard/index.jsx";
 import AddStudent from "./components/pages/dashboard/addStudent.jsx";
 import AddTeacher from "./components/pages/dashboard/addTeacher.jsx";
 import AddTest from "./components/pages/dashboard/addTest.jsx";
+import FullscreenTable from "./components/pages/dashboard/FullscreenTable.jsx";
+import EditTest from "./components/pages/dashboard/editTest.jsx";
 
 const App = () => {
   return (
@@ -18,7 +20,9 @@ const App = () => {
               <Route path="add-student" element={<AddStudent />} />
               <Route path="add-teacher" element={<AddTeacher />} />
               <Route path="add-test" element={<AddTest />} />
+              <Route path="fullscreen-table" element={<FullscreenTable />} />
             </Route>
+            <Route path="/edit/test/:testId" element={<EditTest />} />
           </Route>
         </Route>
       </Routes>

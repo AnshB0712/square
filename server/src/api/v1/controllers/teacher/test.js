@@ -102,38 +102,75 @@ const deleteTest = async (req, res) => {
   });
 };
 
-const getTests = async (req, res) => {
-  try {
-    const user = req.user;
-    const academicYear = req.academicYear;
-    let t;
+const getSingleTest = async (req, res) => {
+  const { testId } = req.params;
+  const user = req.user;
+  const academicYear = req.academicYear;
 
-    if (user.role.includes("ADMIN")) {
-      t = await Test.find({ academicYear })
-        .populate("forStandard")
-        .populate("forSubject")
-        .populate("assignedTo")
-        .lean();
-    } else {
-      t = await Test.find({
-        academicYear,
-        createdBy: user._id,
-        assignedTo: user._id,
-      })
-        .populate("forStandard")
-        .populate("forSubject")
-        .populate("assignedTo")
-        .lean();
-    }
+  const t = await Test.find({
+    _id: testId,
+    academicYear,
+  }).lean();
 
-    res.status(200).json({
+  if (!t)
+    throw new APIError(StatusCodes.NOT_FOUND, "No test found with this id.");
+
+  if (user.role.includes("ADMIN")) {
+    // IF USER IS ADMIN NO NEED TO CHECK BELOW CONDITIONS
+    return res.status(200).json({
       success: true,
       data: t,
       message: "Test Found.",
     });
-  } catch (error) {
-    console.log(error);
   }
+
+  const sameTestOwner =
+    user._id.toString() === t.createdBy.toString() ||
+    user._id.toString() === t.assignedTo.toString();
+
+  if (!sameTestOwner)
+    throw new APIError(
+      StatusCodes.BAD_REQUEST,
+      "This test is not created by you. You can only access test created by you only."
+    );
+
+  res.status(200).json({
+    success: true,
+    data: t,
+    message: "Test Found.",
+  });
+};
+
+const getTests = async (req, res) => {
+  const user = req.user;
+  const academicYear = req.academicYear;
+  let t;
+
+  if (user.role.includes("ADMIN")) {
+    t = await Test.find({ academicYear })
+      .populate("forStandard")
+      .populate("forSubject")
+      .populate("assignedTo")
+      .sort({ on: -1 })
+      .lean();
+  } else {
+    t = await Test.find({
+      academicYear,
+      createdBy: user._id,
+      assignedTo: user._id,
+    })
+      .populate("forStandard")
+      .populate("forSubject")
+      .populate("assignedTo")
+      .sort({ on: -1 })
+      .lean();
+  }
+
+  res.status(200).json({
+    success: true,
+    data: t,
+    message: "Test Found.",
+  });
 };
 
 module.exports = {
@@ -141,4 +178,5 @@ module.exports = {
   updateTest,
   deleteTest,
   getTests,
+  getSingleTest,
 };

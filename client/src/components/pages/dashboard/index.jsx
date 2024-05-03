@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Outlet, useNavigate } from "react-router-dom";
-import RecentTestTable from "./RecentTestTable";
+import RecentTests from "./RecentTests";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ const Dashboard = () => {
       </article>
       <Outlet />
       <br />
-      <RecentTestTable />
+      <RecentTests />
     </>
   );
 };
