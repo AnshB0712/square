@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const marksheet = new mongoose.Schema({
   test: {
     type: mongoose.SchemaTypes.ObjectId,
-    reference: "Test",
+    ref: "Test",
     required: true,
   },
   academicYear: {

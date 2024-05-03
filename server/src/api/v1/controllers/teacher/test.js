@@ -6,6 +6,7 @@ const { APIError } = require("../../utils/apiError.js");
 const createTest = async (req, res) => {
   const user = req.user;
   const files = req.files;
+  const academicYear = req.academicYear;
 
   let { name, description, forStandard, on, forSubject, assignedTo } = req.body;
   let media = [];
@@ -23,6 +24,7 @@ const createTest = async (req, res) => {
     forStandard,
     forSubject,
     assignedTo,
+    academicYear,
     createdBy: user._id,
     on,
     url: media,
@@ -107,7 +109,11 @@ const getTests = async (req, res) => {
     let t;
 
     if (user.role.includes("ADMIN")) {
-      t = await Test.find({ academicYear }).populate("createdBy").lean();
+      t = await Test.find({ academicYear })
+        .populate("forStandard")
+        .populate("forSubject")
+        .populate("assignedTo")
+        .lean();
     } else {
       t = await Test.find({
         academicYear,

@@ -20,22 +20,22 @@ const test = new mongoose.Schema(
     },
     assignedTo: {
       type: mongoose.SchemaTypes.ObjectId,
-      reference: "User",
+      ref: "User",
       required: true,
     },
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
-      reference: "User",
+      ref: "User",
       required: true,
     },
     forStandard: {
       type: mongoose.SchemaTypes.ObjectId,
-      reference: "Standard",
+      ref: "Standard",
       required: true,
     },
     forSubject: {
       type: mongoose.SchemaTypes.ObjectId,
-      reference: "Subject",
+      ref: "Subject",
       required: true,
     },
     url: {
