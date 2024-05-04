@@ -151,7 +151,7 @@ const getTests = async (req, res) => {
       .populate("forStandard")
       .populate("forSubject")
       .populate("assignedTo")
-      .sort({ on: -1 })
+      .sort({ on: 1 })
       .lean();
   } else {
     t = await Test.find({
@@ -162,7 +162,7 @@ const getTests = async (req, res) => {
       .populate("forStandard")
       .populate("forSubject")
       .populate("assignedTo")
-      .sort({ on: -1 })
+      .sort({ on: 1 })
       .lean();
   }
 

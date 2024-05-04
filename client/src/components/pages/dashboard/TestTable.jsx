@@ -61,7 +61,7 @@ const TestTable = () => {
                   }).format(new Date(test.on))}
                 </Badge>
               </TableCell>
-              <TableCell className="flex items-center justify-between">
+              <TableCell className="flex items-center hidden sm:table-cell text-center">
                 <Button
                   className="text-xs underline"
                   style={{ color: "#6E49BF" }}
@@ -74,7 +74,7 @@ const TestTable = () => {
                 >
                   Edit
                 </Button>
-                <span className="inline-block h-[20px] w-[1px] bg-input" />
+                <span className="inline-block h-[20px] w-[1px] bg-input mx-1.5" />
                 <Button
                   className="text-xs underline"
                   style={{ color: "#6E49BF" }}
