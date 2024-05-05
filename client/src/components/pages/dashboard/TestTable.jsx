@@ -1,3 +1,26 @@
+import useTests from "../../../hooks/query/useTests";
+import { Loading } from "../../layout/loading";
+import React from "react";
+import { ArrowDownUp, ChevronsDown, EllipsisVertical } from "lucide-react";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -6,94 +29,257 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import useTests from "../../../hooks/query/useTests";
-import { Loading } from "../../layout/loading";
-import { useNavigate } from "react-router-dom";
-import { handleExitFullScreen } from "./RecentTests";
+import { Link, useLocation } from "react-router-dom";
+
+export const columns = [
+  {
+    accessorKey: "_id",
+  },
+  {
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "standard",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Standard
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div>{`${row.getValue("standard").class}${
+        row.getValue("standard").field === "NONE"
+          ? ""
+          : "-" + row.getValue("standard").field
+      }`}</div>
+    ),
+  },
+  {
+    id: "sub",
+    accessorKey: "subject",
+    header: () => <div className="text-right">Subject</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="text-right font-medium">{row.getValue("sub").name}</div>
+      );
+    },
+  },
+  {
+    accessorKey: "on",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Date
+        <ArrowDownUp className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const date = row.getValue("on");
+
+      const formatted = new Intl.DateTimeFormat("en-US", {
+        dateStyle: "medium",
+        timeZone: "Asia/Kolkata",
+      }).format(new Date(date));
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <EllipsisVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <Link
+                to={`/edit/test/${row.getValue("_id")}`}
+                className="underline"
+                style={{ color: "#7549C4" }}
+              >
+                Edit
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link className="underline" style={{ color: "#7549C4" }}>
+                Marksheet
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];
+
+const T = ({ data }) => {
+  const location = useLocation();
+  const isDashboardRoute = location.pathname.includes("dashboard");
+
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({
+    actions: !isDashboardRoute,
+    sub: !isDashboardRoute,
+  });
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+    },
+  });
+
+  return (
+    <div className="w-full">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter name..."
+          value={table.getColumn("name")?.getFilterValue() ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        {!isDashboardRoute && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns <ChevronsDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+      </div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      {!isDashboardRoute && (
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="flex-1 text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredRowModel().rows.length} row(s) selected.
+          </div>
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const TestTable = () => {
   const { data, isLoading } = useTests();
-  const navigate = useNavigate();
 
   if (isLoading) return <Loading />;
 
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead className="hidden sm:table-cell">Assigned-To</TableHead>
-          <TableHead>Standard</TableHead>
-          <TableHead className="hidden sm:table-cell">Subject</TableHead>
-          <TableHead className="text-right sm:text-center">Date</TableHead>
-          <TableHead className="hidden sm:table-cell text-center">
-            Actions
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.data.data.map((test) => {
-          return (
-            <TableRow key={test._id}>
-              <TableCell>
-                <div className="font-normal truncate">{test.name}</div>
-              </TableCell>
-              <TableCell className="truncate hidden sm:table-cell">
-                {test.assignedTo.name}
-              </TableCell>
-              <TableCell>
-                {`${test.standard.class}${
-                  test.standard.field === "NONE"
-                    ? ""
-                    : "-" + test.standard.field
-                }`}
-              </TableCell>
-              <TableCell className="hidden sm:table-cell">
-                {test.subject.name}
-              </TableCell>
-              <TableCell className="text-right sm:text-center">
-                <Badge className="text-xs" variant="outline">
-                  {new Intl.DateTimeFormat("en-GB", {
-                    dateStyle: "medium",
-                    timeZone: "Asia/Kolkata",
-                  }).format(new Date(test.on))}
-                </Badge>
-              </TableCell>
-              <TableCell className="flex items-center hidden sm:table-cell text-center">
-                <Button
-                  className="text-xs underline"
-                  style={{ color: "#6E49BF" }}
-                  variant="link"
-                  size="xs"
-                  onClick={() => {
-                    handleExitFullScreen();
-                    navigate(`/edit/test/${test._id}`);
-                  }}
-                >
-                  Edit
-                </Button>
-                <span className="inline-block h-[20px] w-[1px] bg-input mx-1.5" />
-                <Button
-                  className="text-xs underline"
-                  style={{ color: "#6E49BF" }}
-                  variant="link"
-                  size="xs"
-                  onClick={() => {
-                    handleExitFullScreen();
-                    navigate(`/marksheet/test/${test._id}`);
-                  }}
-                >
-                  Marksheet
-                </Button>
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
-  );
+  return <T data={data.data.data} />;
 };
 
 export default TestTable;
