@@ -10,13 +10,14 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 
-const MDX = ({ setValue }) => {
+const MDX = ({ setValue, markdown }) => {
   return (
     <div>
       <MDXEditor
         onChange={(e) => setValue("description", e)}
-        markdown="...Test Description..."
+        markdown={markdown || "...Test Description..."}
         contentEditableClassName="prose"
+        className="border-input border-2 rounded-md"
         plugins={[
           quotePlugin(),
           listsPlugin(),

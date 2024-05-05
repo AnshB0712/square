@@ -44,14 +44,14 @@ const TestTable = () => {
                 {test.assignedTo.name}
               </TableCell>
               <TableCell>
-                {`${test.forStandard.class}${
-                  test.forStandard.field === "NONE"
+                {`${test.standard.class}${
+                  test.standard.field === "NONE"
                     ? ""
-                    : "-" + test.forStandard.field
+                    : "-" + test.standard.field
                 }`}
               </TableCell>
               <TableCell className="hidden sm:table-cell">
-                {test.forSubject.name}
+                {test.subject.name}
               </TableCell>
               <TableCell className="text-right sm:text-center">
                 <Badge className="text-xs" variant="outline">

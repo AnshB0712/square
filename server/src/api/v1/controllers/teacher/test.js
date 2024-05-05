@@ -8,7 +8,7 @@ const createTest = async (req, res) => {
   const files = req.files;
   const academicYear = req.academicYear;
 
-  let { name, description, forStandard, on, forSubject, assignedTo } = req.body;
+  let { name, description, standard, on, subject, assignedTo } = req.body;
   let media = [];
 
   if (!assignedTo) assignedTo = user._id;
@@ -21,8 +21,8 @@ const createTest = async (req, res) => {
   const t = await Test.create({
     name,
     description,
-    forStandard,
-    forSubject,
+    standard,
+    subject,
     assignedTo,
     academicYear,
     createdBy: user._id,
@@ -36,13 +36,15 @@ const createTest = async (req, res) => {
     data: t,
   });
 };
-
 const updateTest = async (req, res) => {
   const { testId } = req.params;
   const user = req.user;
   const data = req.body;
 
   const t = await Test.findById(testId).lean();
+
+  if (!t)
+    throw new APIError(StatusCodes.NOT_FOUND, "No test found with this id.");
 
   const isUserAdmin = req.user.role.includes("ADMIN");
   const isTestOwnerSame = t.createdBy.toString() === user._id.toString();
@@ -53,22 +55,10 @@ const updateTest = async (req, res) => {
       "cannot edit test as it is not created by you."
     );
 
-  const files = req.files;
-  let url;
-
-  if (files.length) {
-    url = await uploadMultiMedia(files);
-  }
-
   const u = await Test.findByIdAndUpdate(
     testId,
     {
       ...data,
-      ...(url
-        ? {
-            url: url.map((u) => u.secure_url),
-          }
-        : {}),
     },
     { new: true }
   );
@@ -84,6 +74,9 @@ const deleteTest = async (req, res) => {
   const user = req.user;
 
   const t = await Test.findById(testId).lean();
+
+  if (!t)
+    throw new APIError(StatusCodes.NOT_FOUND, "No test found with this id.");
 
   const isUserAdmin = req.user.role.includes("ADMIN");
   const isTestOwnerSame = t.createdBy.toString() === user._id.toString();
@@ -101,13 +94,12 @@ const deleteTest = async (req, res) => {
     message: "Test is deleted",
   });
 };
-
 const getSingleTest = async (req, res) => {
   const { testId } = req.params;
   const user = req.user;
   const academicYear = req.academicYear;
 
-  const t = await Test.find({
+  const t = await Test.findOne({
     _id: testId,
     academicYear,
   }).lean();
@@ -140,7 +132,6 @@ const getSingleTest = async (req, res) => {
     message: "Test Found.",
   });
 };
-
 const getTests = async (req, res) => {
   const user = req.user;
   const academicYear = req.academicYear;
@@ -148,8 +139,8 @@ const getTests = async (req, res) => {
 
   if (user.role.includes("ADMIN")) {
     t = await Test.find({ academicYear })
-      .populate("forStandard")
-      .populate("forSubject")
+      .populate("standard")
+      .populate("subject")
       .populate("assignedTo")
       .sort({ on: 1 })
       .lean();
@@ -159,8 +150,8 @@ const getTests = async (req, res) => {
       createdBy: user._id,
       assignedTo: user._id,
     })
-      .populate("forStandard")
-      .populate("forSubject")
+      .populate("standard")
+      .populate("subject")
       .populate("assignedTo")
       .sort({ on: 1 })
       .lean();

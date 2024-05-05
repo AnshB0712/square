@@ -28,12 +28,12 @@ const test = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    forStandard: {
+    standard: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Standard",
       required: true,
     },
-    forSubject: {
+    subject: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Subject",
       required: true,

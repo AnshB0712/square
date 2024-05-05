@@ -2,17 +2,17 @@ import { useMutation } from "react-query";
 import { toast } from "sonner";
 import usePrivateAxios from "../usePrivateAxios";
 
-const updateTest = async (id, details, axiosInstance) => {
-  const res = await axiosInstance.patch(`/teacher/update-test/${id}`, details);
+const deleteTest = async (id, axiosInstance) => {
+  const res = await axiosInstance.delete(`/teacher/delete-test/${id}`);
   return res;
 };
 
-const useUpdateTest = () => {
+const useDeleteTest = () => {
   const axios = usePrivateAxios();
   const mutate = useMutation({
-    mutationFn: ({ id, details }) => updateTest(id, details, axios),
+    mutationFn: ({ id }) => deleteTest(id, axios),
     onSuccess: () => {
-      toast("Test has been updated", {
+      toast("Test has been deleted.", {
         description: `${new Intl.DateTimeFormat("en-GB", {
           dateStyle: "full",
           timeStyle: "long",
@@ -24,4 +24,4 @@ const useUpdateTest = () => {
   return mutate;
 };
 
-export default useUpdateTest;
+export default useDeleteTest;

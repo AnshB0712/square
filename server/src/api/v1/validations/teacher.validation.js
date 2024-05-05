@@ -8,8 +8,8 @@ const validateTest = {
       description: Joi.string().required(),
       on: Joi.date().required(),
       assignedTo: Joi.string().custom(objectId),
-      forStandard: Joi.string().custom(objectId).required(),
-      forSubject: Joi.string().custom(objectId).required(),
+      standard: Joi.string().custom(objectId).required(),
+      subject: Joi.string().custom(objectId).required(),
     })
     .required(),
 };
@@ -29,8 +29,8 @@ const validateUpdateTest = {
       name: Joi.string(),
       description: Joi.string(),
       on: Joi.date(),
-      forStandard: Joi.string().custom(objectId),
-      forSubject: Joi.string().custom(objectId),
+      standard: Joi.string().custom(objectId),
+      subject: Joi.string().custom(objectId),
     })
     .required(),
 };

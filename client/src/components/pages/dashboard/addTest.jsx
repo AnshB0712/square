@@ -123,17 +123,7 @@ const AddTest = () => {
       return;
     }
 
-    const { standard, subject, on, description, name, file } = details;
-    const data = {
-      forStandard: standard,
-      forSubject: subject,
-      name,
-      description,
-      on,
-      file,
-    };
-
-    addTest.mutate(data, {
+    addTest.mutate(details, {
       onError: (e) =>
         setError("formError", {
           type: "custom",
