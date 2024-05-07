@@ -339,7 +339,7 @@ const EditTest = () => {
 
   if (isLoading || standardsLoading || subjectLoading)
     return (
-      <div className="grid place-items-center h-[50%]">
+      <div className="grid place-items-center h-[50vh]">
         <Loading />
       </div>
     );

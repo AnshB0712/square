@@ -35,8 +35,37 @@ const validateUpdateTest = {
     .required(),
 };
 
+const validateNewMarksheet = {
+  params: {
+    testId: Joi.string().custom(objectId).required(),
+  },
+  body: Joi.object()
+    .keys({
+      fullMarksOfTest: Joi.number().required(),
+      test: Joi.string().custom(objectId),
+      marksheet: Joi.object().pattern(Joi.string().custom(objectId), Joi.number()).required(),
+    })
+    .required(),
+}
+
+const validateUpdateMarksheet = {
+  params: {
+    testId: Joi.string().custom(objectId).required(),
+  },
+  body: Joi.object()
+    .keys({
+      fullMarksOfTest: Joi.number().required(),
+      test: Joi.string().custom(objectId),
+      marksheet: Joi.object().pattern(Joi.string().custom(objectId), Joi.number()).required(),
+    })
+    .min(1),
+}
+
+
 module.exports = {
   validateTest,
   validateDeleteTest,
   validateUpdateTest,
+  validateNewMarksheet 
+  validateUpdateMarksheet
 };

@@ -5,6 +5,7 @@ const marksheet = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: "Test",
     required: true,
+    unique: true
   },
   academicYear: {
     type: String,

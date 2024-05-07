@@ -8,6 +8,7 @@ import AddTeacher from "./components/pages/dashboard/addTeacher.jsx";
 import AddTest from "./components/pages/dashboard/addTest.jsx";
 import EditTest from "./components/pages/dashboard/editTest.jsx";
 import FullTestTable from "./components/pages/dashboard/FullTestTable.jsx";
+import Marksheet from "./components/pages/dashboard/marksheet.jsx";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
             </Route>
             <Route path="/test-table" element={<FullTestTable />} />
             <Route path="/edit/test/:testId" element={<EditTest />} />
+            <Route path="/marksheet/test/:testId" element={<Marksheet />} />
           </Route>
         </Route>
       </Routes>

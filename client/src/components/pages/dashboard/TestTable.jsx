@@ -33,9 +33,6 @@ import { Link, useLocation } from "react-router-dom";
 
 export const columns = [
   {
-    accessorKey: "_id",
-  },
-  {
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
@@ -107,7 +104,7 @@ export const columns = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link
-                to={`/edit/test/${row.getValue("_id")}`}
+                to={`/edit/test/${row.original["_id"]}`}
                 className="underline"
                 style={{ color: "#7549C4" }}
               >
@@ -115,7 +112,9 @@ export const columns = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link className="underline" style={{ color: "#7549C4" }}>
+              <Link className="underline" 
+              to={`/marksheet/test/${row.original["_id"]}`}
+              style={{ color: "#7549C4" }}>
                 Marksheet
               </Link>
             </DropdownMenuItem>
@@ -135,6 +134,7 @@ const T = ({ data }) => {
   const [columnVisibility, setColumnVisibility] = React.useState({
     actions: !isDashboardRoute,
     sub: !isDashboardRoute,
+    mongo_id: false
   });
 
   const table = useReactTable({
@@ -216,8 +216,8 @@ const T = ({ data }) => {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
+              table.getRowModel().rows.map((row) => {
+                return <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
@@ -230,7 +230,7 @@ const T = ({ data }) => {
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
+              })
             ) : (
               <TableRow>
                 <TableCell

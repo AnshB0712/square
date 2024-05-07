@@ -8,11 +8,18 @@ const {
   getTests,
   getSingleTest
 } = require("../controllers/teacher/test.js");
+const {
+  createMarksheet,
+  updateMarksheet,
+  getMarksheet
+} = require("../controllers/teacher/marksheet.js.js");
 const { validate } = require("../middlewares/validate");
 const {
   validateTest,
   validateDeleteTest,
   validateUpdateTest,
+  validateNewMarksheet,
+  validateUpdateMarksheet
 } = require("../validations/teacher.validation.js");
 
 const multer = require("multer");
@@ -24,6 +31,8 @@ const MAX_MEDIA_COUNT = 6;
 
 teacherRouter.get("/tests", getTests);
 teacherRouter.get("/tests/:testId", getSingleTest);
+teacherRouter.get("/marksheet/:testId", getMarksheet);
+
 teacherRouter.post(
   "/new-test",
   upload.array("file[]", MAX_MEDIA_COUNT),
@@ -39,6 +48,17 @@ teacherRouter.delete(
   "/delete-test/:testId",
   validate(validateDeleteTest),
   deleteTest
+);
+
+teacherRouter.post(
+  "/new-marksheet/:testId",
+  validate(validateNewMarksheet),
+  createMarksheet
+);
+teacherRouter.patch(
+  "/update-marksheet/:testId",
+  validate(validateUpdateMarksheet),
+  updateMarksheet
 );
 
 module.exports = {

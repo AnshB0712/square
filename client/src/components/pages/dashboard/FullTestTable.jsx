@@ -14,7 +14,7 @@ const FullTestTable = () => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between px-2">
-        <div className="flex flex-col">
+        <div className="flex flex-col space-y-1.5">
           <CardTitle className="px-2">X-Square Test Table</CardTitle>
           <CardDescription className="px-2">
             Take actions on test or edit them as well.

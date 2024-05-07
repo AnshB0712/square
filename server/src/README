@@ -14,6 +14,8 @@ When handling image uploads, offloading the task to an asynchronous process can 
 
 Utilizing meta-data for images can help minimize the number of images stored in the bucket. Instead of storing multiple copies of the same image with different attributes, such as size or format, store a single high-resolution image and generate the required variants dynamically using meta-data. This approach reduces storage costs and simplifies image management.
 
+### 3. Add Validators in GET requests.
+
 ## Conclusion
 
 By implementing the above considerations, we can enhance the performance and efficiency of image handling in our application, resulting in a better user experience and optimized resource utilization.
