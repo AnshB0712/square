@@ -43,10 +43,12 @@ const validateNewMarksheet = {
     .keys({
       fullMarksOfTest: Joi.number().required(),
       test: Joi.string().custom(objectId),
-      marksheet: Joi.object().pattern(Joi.string().custom(objectId), Joi.number()).required(),
+      marksheet: Joi.object()
+        .pattern(Joi.string().custom(objectId), Joi.number())
+        .required(),
     })
     .required(),
-}
+};
 
 const validateUpdateMarksheet = {
   params: {
@@ -56,16 +58,17 @@ const validateUpdateMarksheet = {
     .keys({
       fullMarksOfTest: Joi.number().required(),
       test: Joi.string().custom(objectId),
-      marksheet: Joi.object().pattern(Joi.string().custom(objectId), Joi.number()).required(),
+      marksheet: Joi.object()
+        .pattern(Joi.string().custom(objectId), Joi.number())
+        .required(),
     })
     .min(1),
-}
-
+};
 
 module.exports = {
   validateTest,
   validateDeleteTest,
   validateUpdateTest,
-  validateNewMarksheet 
-  validateUpdateMarksheet
+  validateNewMarksheet,
+  validateUpdateMarksheet,
 };

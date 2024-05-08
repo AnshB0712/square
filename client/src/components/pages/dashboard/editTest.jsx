@@ -32,8 +32,8 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
-import { FormMessage } from "../../ui/form";
 import useDeleteTest from "../../../hooks/mutation/useDeleteTest";
 
 const MDX = React.lazy(() => import("./mdx"));

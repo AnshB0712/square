@@ -6,20 +6,20 @@ const {
   updateTest,
   deleteTest,
   getTests,
-  getSingleTest
+  getSingleTest,
 } = require("../controllers/teacher/test.js");
 const {
   createMarksheet,
   updateMarksheet,
-  getMarksheet
-} = require("../controllers/teacher/marksheet.js.js");
+  getMarksheet,
+} = require("../controllers/teacher/marksheet");
 const { validate } = require("../middlewares/validate");
 const {
   validateTest,
   validateDeleteTest,
   validateUpdateTest,
   validateNewMarksheet,
-  validateUpdateMarksheet
+  validateUpdateMarksheet,
 } = require("../validations/teacher.validation.js");
 
 const multer = require("multer");

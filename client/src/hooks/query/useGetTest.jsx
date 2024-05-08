@@ -12,6 +12,7 @@ const useGetTest = ({ testId }) => {
     queryKey: ["tests", testId],
     queryFn: () => getTest(axios, testId),
     staleTime: 10_000,
+    enabled: !!testId,
   });
   return q;
 };
