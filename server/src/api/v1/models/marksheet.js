@@ -5,7 +5,7 @@ const marksheet = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: "Test",
     required: true,
-    unique: true
+    unique: true,
   },
   academicYear: {
     type: String,
@@ -15,11 +15,24 @@ const marksheet = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  sheet: {
-    type: Map,
-    of: Number,
-    default: {},
-  },
+  sheet: [
+    {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+      },
+      data: {
+        mark: {
+          type: String,
+          required: true,
+        },
+        reqmark: {
+          type: String,
+          required: true,
+        },
+      },
+    },
+  ],
 });
 
 const Marksheet = mongoose.model("Marksheet", marksheet);

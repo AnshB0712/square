@@ -32,65 +32,12 @@ import { useForm } from "react-hook-form";
 import useMarsksheetDetails from "../../../hooks/query/useMarsksheetDetails";
 import { Loading } from "../../layout/loading";
 
-const T = ({ data }) => {
+const T = ({ data, form, columns }) => {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
-
-  const columns = [
-    {
-      accessorKey: "name",
-      header: "Name",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
-      ),
-    },
-    {
-      id: "actions",
-      header: () => <p className="text-center">Actions</p>,
-      cell: ({ row }) => {
-        return (
-          <div className="flex gap-1">
-            <FormField
-              control={form.control}
-              name={`${row.original["_id"]}.marks`}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Marks</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="number" placeholder="marks..." />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
-              control={form.control}
-              name={`${row.original["_id"]}.remark`}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Remark</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="can do better..."
-                        className="max-w-sm"
-                      />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
-            />
-          </div>
-        );
-      },
-    },
-  ];
-
   const table = useReactTable({
-    data: data.students,
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -105,11 +52,7 @@ const T = ({ data }) => {
     },
   });
 
-  const form = useForm({
-    values: {
-      name: table.getColumn("name")?.getFilterValue() ?? "",
-    },
-  });
+  const handleSubmit = (d) => {};
 
   return (
     <div>
@@ -118,49 +61,40 @@ const T = ({ data }) => {
           onSubmit={(e) => {
             form.clearErrors();
             form.handleSubmit((d) => {
-              console.log(d);
+              handleSubmit(d);
             })(e);
           }}
           className="space-y-6"
         >
           <div className="flex gap-2 justify-center items-center py-4">
+            <div className="space-y-2">
+              <FormLabel>Filter by Name</FormLabel>
+              <Input
+                placeholder="Filter name..."
+                className="max-w-sm "
+                onChange={(event) =>
+                  table.getColumn("name")?.setFilterValue(event.target.value)
+                }
+              />
+            </div>
+
             <FormField
               control={form.control}
-              name="name"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Filter by Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Filter name..."
-                        className="max-w-sm"
-                        onChange={(event) =>
-                          table
-                            .getColumn("name")
-                            ?.setFilterValue(event.target.value)
-                        }
-                      />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
+              name="fullmarks"
+              rules={{ required: true }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>FullMarks</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="fullmarks..."
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
             />
-            {
-              <FormField
-                control={form.control}
-                name="fullmarks"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>FullMarks</FormLabel>
-                    <FormControl>
-                      <Input placeholder="fullmarks..." {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            }
           </div>
           <div className="rounded-md border">
             <Table>
@@ -241,6 +175,60 @@ const Marksheet = () => {
   const { testId } = useParams();
   const { data, isLoading } = useMarsksheetDetails({ testId });
 
+  const form = useForm();
+  const columns = React.useMemo(
+    () => [
+      {
+        accessorKey: "name",
+        header: "Name",
+        cell: ({ row }) => (
+          <div className="capitalize">{row.getValue("name")}</div>
+        ),
+      },
+      {
+        id: "actions",
+        header: () => <p className="text-center">Actions</p>,
+        cell: ({ row }) => {
+          return (
+            <div className="flex gap-1">
+              <FormField
+                control={form.control}
+                rules={{ required: true }}
+                name={`sheet.${row.index}.${row.original["_id"]}.marks`}
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Marks</FormLabel>
+                      <Input {...field} type="number" placeholder="marks..." />
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name={`sheet.${row.index}.${row.original["_id"]}.remark`}
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Remark</FormLabel>
+                      <Input
+                        {...field}
+                        placeholder="can do better..."
+                        className="max-w-sm"
+                      />
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   if (isLoading) return <Loading />;
 
   return (
@@ -267,7 +255,7 @@ const Marksheet = () => {
               <Badge variant="outline">{data.data.data.t.subject.name}</Badge>
             </div>
           </div>
-          <T data={data.data.data} />
+          <T data={data.data.data.students} form={form} columns={columns} />
         </div>
       </div>
     </>

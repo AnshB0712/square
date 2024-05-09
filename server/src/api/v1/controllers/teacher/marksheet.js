@@ -6,7 +6,7 @@ const { APIError } = require("../../utils/apiError.js");
 
 const createMarksheet = async (req, res) => {
   const { testId } = req.params;
-  const { marksheet, fullMarksOfTest } = req.body;
+  const { sheet, fullmarks } = req.body;
   const academicYear = req.academicYear;
 
   const t = await Test.findById(testId);
@@ -19,9 +19,9 @@ const createMarksheet = async (req, res) => {
 
   const m = await Marksheet.create({
     test: testId,
-    sheet: marksheet,
+    sheet,
     academicYear,
-    fullMarksOfTest,
+    fullMarksOfTest: fullmarks,
   });
 
   res.status(StatusCodes.CREATED).json({

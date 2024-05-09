@@ -41,9 +41,8 @@ const validateNewMarksheet = {
   },
   body: Joi.object()
     .keys({
-      fullMarksOfTest: Joi.number().required(),
-      test: Joi.string().custom(objectId),
-      marksheet: Joi.object()
+      fullmarks: Joi.number().required(),
+      sheet: Joi.object()
         .pattern(Joi.string().custom(objectId), Joi.number())
         .required(),
     })
