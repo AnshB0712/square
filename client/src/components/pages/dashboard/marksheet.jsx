@@ -1,9 +1,6 @@
 import { useParams } from "react-router-dom";
-import useGetTest from "../../../hooks/query/useGetTest";
-import useStudentsFromStandard from "../../../hooks/query/useStudentsFromStandard";
-import { Loading } from "../../layout/loading";
 import React from "react";
-import { ArrowDownUp, ChevronsDown, EllipsisVertical } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import {
   flexRender,
   getCoreRowModel,
@@ -13,9 +10,9 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -38,23 +35,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useForm } from "react-hook-form";
+import useMarsksheetDetails from "../../../hooks/query/useMarsksheetDetails";
+import { Loading } from "../../layout/loading";
 
 export const columns = [
   {
     accessorKey: "name",
     header: "Student Name",
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "standard",
-    header: "Standard",
-    cell: ({ row }) => (
-      <div>{`${row.getValue("standard").class}${
-        row.getValue("standard").field === "NONE"
-          ? ""
-          : "-" + row.getValue("standard").field
-      }`}</div>
-    ),
   },
   {
     id: "actions",
@@ -84,7 +72,7 @@ const T = ({ data }) => {
   const [columnVisibility, setColumnVisibility] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -99,107 +87,141 @@ const T = ({ data }) => {
     },
   });
 
+  const form = useForm({
+    // values: {
+    //   name: table.getColumn("name")?.getFilterValue() ?? "",
+    // },
+  });
+
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter name..."
-          value={table.getColumn("name")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        {
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        }
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => {
+    <div>
+      <Form {...form}>
+        <form>
+          <div className="flex gap-2 justify-center items-center py-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => {
                 return (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+                  <FormItem>
+                    <FormLabel>Filter by Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Filter name..."
+                        className="max-w-sm"
+                      />
+                    </FormControl>
+                  </FormItem>
                 );
-              })
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              }}
+            />
+            {
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>FullMarks</FormLabel>
+                    <FormControl>
+                      <Input placeholder="fullmarks..." {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            }
+          </div>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => {
+                    return (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
 
 const Marksheet = () => {
   const { testId } = useParams();
-  const { data: test } = useGetTest({ testId });
-  const { data: students } = useStudentsFromStandard({
-    stdId: test?.data?.data?.standard,
-  });
-  const form = useForm();
+  const { data, isLoading } = useMarsksheetDetails({ testId });
+
+  if (isLoading) return <Loading />;
 
   return (
     <>
-      <Form {...form}>
-        <form>
-          <T data={[]} />
-        </form>
-      </Form>
+      <div className="w-full max-w-lg rounded-lg">
+        <div className="mx-auto max-w-md space-y-2 ">
+          <div className="text-center">
+            <h1 className="text-xl font-bold">Marksheet</h1>
+            <p className="text-gray-500 dark:text-gray-400">
+              Create a Marksheet for Test.
+            </p>
+          </div>
+          <br />
+          <div className="space-y-2">
+            <div className="flex justify-start items-center gap-2">
+              <p className="font-semibold text-sm">Standard:</p>
+              <Badge variant="outline">
+                {data.data.data.t.standard.class}-
+                {data.data.data.t.standard.field}
+              </Badge>
+            </div>
+            <div className="flex justify-start items-center gap-2">
+              <p className="font-semibold text-sm">Subject:</p>
+              <Badge variant="outline">{data.data.data.t.subject.name}</Badge>
+            </div>
+          </div>
+          <T data={data.data.data} />
+        </div>
+      </div>
     </>
   );
 };

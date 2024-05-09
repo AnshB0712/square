@@ -12,6 +12,7 @@ const {
   createMarksheet,
   updateMarksheet,
   getMarksheet,
+  getMarksheetDetails,
 } = require("../controllers/teacher/marksheet");
 const { validate } = require("../middlewares/validate");
 const {
@@ -32,6 +33,7 @@ const MAX_MEDIA_COUNT = 6;
 teacherRouter.get("/tests", getTests);
 teacherRouter.get("/tests/:testId", getSingleTest);
 teacherRouter.get("/marksheet/:testId", getMarksheet);
+teacherRouter.get("/marksheet-details/:testId", getMarksheetDetails);
 
 teacherRouter.post(
   "/new-test",
