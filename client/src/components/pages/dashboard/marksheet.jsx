@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import React from "react";
-import { EllipsisVertical } from "lucide-react";
 import {
   flexRender,
   getCoreRowModel,
@@ -9,21 +8,16 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -38,41 +32,65 @@ import { useForm } from "react-hook-form";
 import useMarsksheetDetails from "../../../hooks/query/useMarsksheetDetails";
 import { Loading } from "../../layout/loading";
 
-export const columns = [
-  {
-    accessorKey: "name",
-    header: "Student Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    id: "actions",
-    cell: () => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <EllipsisVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Marksheet</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
-
 const T = ({ data }) => {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
 
+  const columns = [
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("name")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      header: () => <p className="text-center">Actions</p>,
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-1">
+            <FormField
+              control={form.control}
+              name={`${row.original["_id"]}.marks`}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Marks</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="number" placeholder="marks..." />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              control={form.control}
+              name={`${row.original["_id"]}.remark`}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Remark</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="can do better..."
+                        className="max-w-sm"
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
+        );
+      },
+    },
+  ];
+
   const table = useReactTable({
-    data: [],
+    data: data.students,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -88,15 +106,23 @@ const T = ({ data }) => {
   });
 
   const form = useForm({
-    // values: {
-    //   name: table.getColumn("name")?.getFilterValue() ?? "",
-    // },
+    values: {
+      name: table.getColumn("name")?.getFilterValue() ?? "",
+    },
   });
 
   return (
     <div>
       <Form {...form}>
-        <form>
+        <form
+          onSubmit={(e) => {
+            form.clearErrors();
+            form.handleSubmit((d) => {
+              console.log(d);
+            })(e);
+          }}
+          className="space-y-6"
+        >
           <div className="flex gap-2 justify-center items-center py-4">
             <FormField
               control={form.control}
@@ -110,6 +136,11 @@ const T = ({ data }) => {
                         {...field}
                         placeholder="Filter name..."
                         className="max-w-sm"
+                        onChange={(event) =>
+                          table
+                            .getColumn("name")
+                            ?.setFilterValue(event.target.value)
+                        }
                       />
                     </FormControl>
                   </FormItem>
@@ -119,7 +150,7 @@ const T = ({ data }) => {
             {
               <FormField
                 control={form.control}
-                name="username"
+                name="fullmarks"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>FullMarks</FormLabel>
@@ -182,6 +213,23 @@ const T = ({ data }) => {
                 )}
               </TableBody>
             </Table>
+          </div>
+
+          {form.formState.errors["formError"] && (
+            <FormMessage className="text-[0.8rem text-red-500 text-center italic">
+              Error: {form.formState.errors["formError"].message}
+            </FormMessage>
+          )}
+
+          <Separator />
+
+          <div className="space-y-3">
+            <Button className="w-full" type="submit" size="lg">
+              {"Create Marksheet"}
+            </Button>
+            <Button className="w-full" variant="outline" size="lg">
+              {"Cancel"}
+            </Button>
           </div>
         </form>
       </Form>
