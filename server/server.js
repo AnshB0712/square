@@ -1,4 +1,6 @@
 require("express-async-errors");
+const { PORT, FRONTEND_URL } = require("./config");
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -32,7 +34,6 @@ const { router } = require("./src/api/v1/routes");
 const { errorMiddleware } = require("./src/api/v1/middlewares/errorMiddleware");
 const { connectToDB } = require("./src/api/v1/utils/connectToDB");
 const { APIError } = require("./src/api/v1/utils/apiError");
-const { PORT, FRONTEND_URL } = require("./config");
 const { seed } = require("./src/api/v1/scripts/seed");
 
 app.use("/api/v1", router);
