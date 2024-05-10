@@ -108,7 +108,7 @@ const loginTeacher = async (req, res) => {
   res.cookie("refresh", refresh, {
     httpOnly: true, // Cookie is accessible only through the HTTP protocol, not JavaScript
     secure: true, // Cookie is only sent over HTTPS
-    sameSite: "strict", // Cookie is sent only for same-site requests by default
+    sameSite: "none", // Cookie is sent only for same-site requests by default
   });
 
   res.status(StatusCodes.OK).json({
