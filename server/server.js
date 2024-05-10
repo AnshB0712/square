@@ -5,8 +5,10 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
+console.log(FRONTEND_URL);
+
 const corsOptions = {
-  origin: ["http://localhost:5173"],
+  origin: [FRONTEND_URL],
   credentials: true,
 };
 
@@ -30,7 +32,7 @@ const { router } = require("./src/api/v1/routes");
 const { errorMiddleware } = require("./src/api/v1/middlewares/errorMiddleware");
 const { connectToDB } = require("./src/api/v1/utils/connectToDB");
 const { APIError } = require("./src/api/v1/utils/apiError");
-const { PORT } = require("./config");
+const { PORT, FRONTEND_URL } = require("./config");
 const { seed } = require("./src/api/v1/scripts/seed");
 
 app.use("/api/v1", router);
