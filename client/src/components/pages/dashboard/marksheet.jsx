@@ -192,7 +192,7 @@ const T = ({ testId, data, form, columns }) => {
 
           <div className="space-y-3">
             <Button
-              disable={addMarksheet.isLoading}
+              disabled={addMarksheet.isLoading}
               className="w-full"
               type="submit"
               size="lg"
@@ -200,7 +200,7 @@ const T = ({ testId, data, form, columns }) => {
               {addMarksheet.isLoading ? <Loading /> : "Create Marksheet"}
             </Button>
             <Button
-              disable={addMarksheet.isLoading}
+              disabled={addMarksheet.isLoading}
               className="w-full"
               variant="outline"
               size="lg"
