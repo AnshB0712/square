@@ -24,7 +24,7 @@ const loginStudent = async (req, res) => {
   res.cookie("refresh", refresh, {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "none",
   });
 
   res.status(StatusCodes.OK).json({
