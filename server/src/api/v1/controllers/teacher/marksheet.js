@@ -24,6 +24,8 @@ const createMarksheet = async (req, res) => {
     fullMarksOfTest: fullmarks,
   });
 
+  await t.updateOne({ marksheetCreated: true });
+
   res.status(StatusCodes.CREATED).json({
     success: true,
     data: m,
@@ -43,7 +45,7 @@ const updateMarksheet = async (req, res) => {
       "test don't exists with this testId."
     );
 
-  const m = await Marksheet.findOneAndUpdte(
+  const m = await Marksheet.findOneAndUpdate(
     { test: testId },
     { ...data },
     { new: true }
@@ -58,8 +60,9 @@ const updateMarksheet = async (req, res) => {
 
 const getMarksheet = async (req, res) => {
   const { testId } = req.params;
+  const academicYear = req.academicYear;
 
-  const t = await Test.findById(testId);
+  const t = await Test.findById(testId).lean();
 
   if (!t)
     throw new APIError(
@@ -67,11 +70,16 @@ const getMarksheet = async (req, res) => {
       "test don't exists with this testId."
     );
 
+  const students = await User.find({
+    academicYear,
+    standard: t.standard,
+  }).lean();
+
   const m = await Marksheet.findOne({ test: testId });
 
   res.status(StatusCodes.CREATED).json({
     success: true,
-    data: m,
+    data: { students, m },
     message: ".",
   });
 };

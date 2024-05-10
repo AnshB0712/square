@@ -15,24 +15,19 @@ const marksheet = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  sheet: [
-    {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
+  sheet: {
+    type: Map,
+    of: {
+      marks: {
+        type: Number,
         required: true,
       },
-      data: {
-        mark: {
-          type: String,
-          required: true,
-        },
-        reqmark: {
-          type: String,
-          required: true,
-        },
+      remark: {
+        type: String,
+        default: "",
       },
     },
-  ],
+  },
 });
 
 const Marksheet = mongoose.model("Marksheet", marksheet);

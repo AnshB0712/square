@@ -41,6 +41,10 @@ const test = new mongoose.Schema(
     url: {
       type: [String],
     },
+    marksheetCreated: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

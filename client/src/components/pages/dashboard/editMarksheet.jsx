@@ -7,7 +7,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -28,9 +27,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useForm } from "react-hook-form";
-import useMarsksheetDetails from "../../../hooks/query/useMarsksheetDetails";
 import { Loading } from "../../layout/loading";
-import useAddMarksheet from "../../../hooks/mutation/useAddMarksheet";
+import useGetMarksheet from "../../../hooks/query/useGetMarksheet";
+import useUpdateMarksheet from "../../../hooks/mutation/useUpdateMarkseet";
 
 const T = ({ testId, data, form, columns }) => {
   const [sorting, setSorting] = React.useState([]);
@@ -51,15 +50,15 @@ const T = ({ testId, data, form, columns }) => {
       columnVisibility,
     },
   });
-  const addMarksheet = useAddMarksheet();
+  const updateMarksheet = useUpdateMarksheet();
   const navigate = useNavigate();
 
   const handleSubmit = (d) => {
-    const { sheet, fullmarks } = d;
+    const { sheet, fullMarksOfTest } = d;
 
     const marksGreaterThanFullmarks = Object.entries(sheet).filter(
       /* eslint-disable no-unused-vars */
-      ([_, val]) => +val.marks > +fullmarks
+      ([_, val]) => +val.marks > +fullMarksOfTest
     );
 
     if (marksGreaterThanFullmarks.length) {
@@ -72,8 +71,8 @@ const T = ({ testId, data, form, columns }) => {
       return;
     }
 
-    addMarksheet.mutate(
-      { details: d, testId },
+    updateMarksheet.mutate(
+      { details: { sheet, fullMarksOfTest }, testId },
       {
         onError: (e) =>
           form.setError("formError", {
@@ -81,7 +80,7 @@ const T = ({ testId, data, form, columns }) => {
             message: e.response.data.message,
           }),
         onSuccess: () => {
-          navigate(-1);
+          navigate("/dashboard");
         },
       }
     );
@@ -113,7 +112,7 @@ const T = ({ testId, data, form, columns }) => {
 
             <FormField
               control={form.control}
-              name="fullmarks"
+              name="fullMarksOfTest"
               rules={{ required: true, valueAsNumber: true }}
               render={({ field }) => (
                 <FormItem>
@@ -192,15 +191,15 @@ const T = ({ testId, data, form, columns }) => {
 
           <div className="space-y-3">
             <Button
-              disable={addMarksheet.isLoading}
+              disable={updateMarksheet.isLoading}
               className="w-full"
               type="submit"
               size="lg"
             >
-              {addMarksheet.isLoading ? <Loading /> : "Create Marksheet"}
+              {updateMarksheet.isLoading ? <Loading /> : "Update Marksheet"}
             </Button>
             <Button
-              disable={addMarksheet.isLoading}
+              disable={updateMarksheet.isLoading}
               className="w-full"
               variant="outline"
               size="lg"
@@ -215,11 +214,14 @@ const T = ({ testId, data, form, columns }) => {
   );
 };
 
-const Marksheet = () => {
+const EditMarksheet = () => {
   const { testId } = useParams();
-  const { data, isLoading } = useMarsksheetDetails({ testId });
+  const { data, isLoading } = useGetMarksheet({ testId });
 
-  const form = useForm();
+  const form = useForm({
+    defaultValues: {},
+    values: data?.data?.data?.m,
+  });
   const columns = React.useMemo(
     () => [
       {
@@ -282,23 +284,10 @@ const Marksheet = () => {
           <div className="text-center">
             <h1 className="text-xl font-bold">Marksheet</h1>
             <p className="text-gray-500 dark:text-gray-400">
-              Create a Marksheet for Test.
+              Update a Marksheet for Test.
             </p>
           </div>
           <br />
-          <div className="space-y-2">
-            <div className="flex justify-start items-center gap-2">
-              <p className="font-semibold text-sm">Standard:</p>
-              <Badge variant="outline">
-                {data.data.data.t.standard.class}-
-                {data.data.data.t.standard.field}
-              </Badge>
-            </div>
-            <div className="flex justify-start items-center gap-2">
-              <p className="font-semibold text-sm">Subject:</p>
-              <Badge variant="outline">{data.data.data.t.subject.name}</Badge>
-            </div>
-          </div>
           <T
             data={data.data.data.students}
             form={form}
@@ -310,4 +299,4 @@ const Marksheet = () => {
     </>
   );
 };
-export default Marksheet;
+export default EditMarksheet;

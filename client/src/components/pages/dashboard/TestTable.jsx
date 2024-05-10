@@ -103,19 +103,31 @@ export const columns = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
+              {row.original.marksheetCreated ? (
+                <Link
+                  to={`/edit//marksheet/test/${row.original["_id"]}`}
+                  className="underline"
+                  style={{ color: "#7549C4" }}
+                >
+                  Edit Marksheet
+                </Link>
+              ) : (
+                <Link
+                  to={`/marksheet/test/${row.original["_id"]}`}
+                  className="underline"
+                  style={{ color: "#7549C4" }}
+                >
+                  Add Marksheet
+                </Link>
+              )}
+            </DropdownMenuItem>
+            <DropdownMenuItem>
               <Link
                 to={`/edit/test/${row.original["_id"]}`}
                 className="underline"
                 style={{ color: "#7549C4" }}
               >
-                Edit
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link className="underline" 
-              to={`/marksheet/test/${row.original["_id"]}`}
-              style={{ color: "#7549C4" }}>
-                Marksheet
+                Edit Test
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -134,7 +146,7 @@ const T = ({ data }) => {
   const [columnVisibility, setColumnVisibility] = React.useState({
     actions: !isDashboardRoute,
     sub: !isDashboardRoute,
-    mongo_id: false
+    mongo_id: false,
   });
 
   const table = useReactTable({
@@ -217,19 +229,21 @@ const T = ({ data }) => {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => {
-                return <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                return (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
               })
             ) : (
               <TableRow>

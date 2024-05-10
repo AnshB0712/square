@@ -42,9 +42,7 @@ const validateNewMarksheet = {
   body: Joi.object()
     .keys({
       fullmarks: Joi.number().required(),
-      sheet: Joi.object()
-        .pattern(Joi.string().custom(objectId), Joi.number())
-        .required(),
+      sheet: Joi.object().required(),
     })
     .required(),
 };
@@ -56,10 +54,7 @@ const validateUpdateMarksheet = {
   body: Joi.object()
     .keys({
       fullMarksOfTest: Joi.number().required(),
-      test: Joi.string().custom(objectId),
-      marksheet: Joi.object()
-        .pattern(Joi.string().custom(objectId), Joi.number())
-        .required(),
+      sheet: Joi.object().required(),
     })
     .min(1),
 };
