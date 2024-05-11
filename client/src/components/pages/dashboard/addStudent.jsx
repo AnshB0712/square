@@ -11,10 +11,11 @@ import {
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useStandards from "../../../hooks/query/useStandards";
 import { useForm } from "react-hook-form";
 import useAddStudent from "../../../hooks/mutation/useAddStudent";
+import { buttonVariants } from "../../ui/button";
 
 const AddStudent = () => {
   const navigate = useNavigate();
@@ -143,13 +144,12 @@ const AddStudent = () => {
               >
                 {addStudent.isLoading ? <Loading /> : "Add Student"}
               </Button>
-              <Button
-                className="w-full"
-                variant="outline"
-                onClick={() => navigate(-1)}
+              <Link
+                to="/dashboard"
+                className={`${buttonVariants({ variant: "outline" })} w-full`}
               >
                 Cancel
-              </Button>
+              </Link>
             </div>
           </form>
         </div>

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import {
   flexRender,
@@ -30,6 +30,7 @@ import { useForm } from "react-hook-form";
 import { Loading } from "../../layout/loading";
 import useGetMarksheet from "../../../hooks/query/useGetMarksheet";
 import useUpdateMarksheet from "../../../hooks/mutation/useUpdateMarkseet";
+import { buttonVariants } from "../../ui/button";
 
 const T = ({ testId, data, form, columns }) => {
   const [sorting, setSorting] = React.useState([]);
@@ -198,15 +199,15 @@ const T = ({ testId, data, form, columns }) => {
             >
               {updateMarksheet.isLoading ? <Loading /> : "Update Marksheet"}
             </Button>
-            <Button
-              disabled={updateMarksheet.isLoading}
-              className="w-full"
-              variant="outline"
-              size="lg"
-              onClick={() => navigate(-1)}
+            <Link
+              to="/dashboard"
+              style={{
+                pointerEvents: updateMarksheet.isLoading ? "none" : "auto",
+              }}
+              className={`${buttonVariants({ variant: "outline" })} w-full`}
             >
-              {"Cancel"}
-            </Button>
+              Cancel
+            </Link>
           </div>
         </form>
       </Form>

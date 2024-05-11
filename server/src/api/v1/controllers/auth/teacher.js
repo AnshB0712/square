@@ -8,6 +8,7 @@ const {
 } = require("../../utils/encryptPassword");
 const { BACKEND_URL, JWT_KEY } = require("../../../../../config");
 const jwt = require("jsonwebtoken");
+const { createToken } = require("../../utils/createTokens.js");
 
 const registerTeacher = async (req, res) => {
   const { name, phone, mail, standardAssigned } = req.body;
@@ -81,31 +82,13 @@ const loginTeacher = async (req, res) => {
   if (!isPasswordMatched)
     throw new APIError(StatusCodes.BAD_REQUEST, "Password is incorrect.");
 
-  const refresh = jwt.sign(
-    {
-      _id: user._id,
-      role: user.role,
-      name: user.name,
-    },
-    JWT_KEY,
-    {
-      expiresIn: "365d",
-    }
-  );
+  const { accessToken, refreshToken } = createToken({
+    _id: user._id,
+    role: user.role,
+    name: user.name,
+  });
 
-  const token = jwt.sign(
-    {
-      _id: user._id,
-      role: user.role,
-      name: user.name,
-    },
-    JWT_KEY,
-    {
-      expiresIn: "1d",
-    }
-  );
-
-  res.cookie("refresh", refresh, {
+  res.cookie("refresh", refreshToken, {
     httpOnly: true, // Cookie is accessible only through the HTTP protocol, not JavaScript
     secure: true, // Cookie is only sent over HTTPS
     sameSite: "none", // Cookie is sent only for same-site requests by default
@@ -114,7 +97,7 @@ const loginTeacher = async (req, res) => {
   res.status(StatusCodes.OK).json({
     success: true,
     data: {
-      token,
+      token: accessToken,
       role: user.role,
       name: user.name,
     },

@@ -4,6 +4,7 @@ const { APIError } = require("../../utils/apiError");
 const { JWT_KEY } = require("../../../../../config");
 const jwt = require("jsonwebtoken");
 const { comparePassword } = require("../../utils/encryptPassword");
+const { createToken } = require("../../utils/createTokens");
 
 const loginAdmin = async (req, res) => {
   const { phone, password } = req.body;
@@ -27,31 +28,13 @@ const loginAdmin = async (req, res) => {
   if (!isPasswordMatched)
     throw new APIError(StatusCodes.BAD_REQUEST, "Password is incorrect.");
 
-  const token = jwt.sign(
-    {
-      _id: user._id,
-      role: user.role,
-      name: user.name,
-    },
-    JWT_KEY,
-    {
-      expiresIn: "12d",
-    }
-  );
+  const { accessToken, refreshToken } = createToken({
+    _id: user._id,
+    role: user.role,
+    name: user.name,
+  });
 
-  const refresh = jwt.sign(
-    {
-      _id: user._id,
-      role: user.role,
-      name: user.name,
-    },
-    JWT_KEY,
-    {
-      expiresIn: "365d",
-    }
-  );
-
-  res.cookie("refresh", refresh, {
+  res.cookie("refresh", refreshToken, {
     httpOnly: true, // Cookie is accessible only through the HTTP protocol, not JavaScript
     secure: true, // Cookie is only sent over HTTPS
     sameSite: "none", // Cookie is sent only for same-site requests by default
@@ -60,7 +43,7 @@ const loginAdmin = async (req, res) => {
   res.status(StatusCodes.OK).json({
     success: true,
     data: {
-      token,
+      token: accessToken,
       role: user.role,
       name: user.name,
     },
