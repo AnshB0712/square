@@ -1,5 +1,4 @@
 import { CircleUser, Menu } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,9 +10,51 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logo from "../../assets/logo.svg";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { customAxios } from "../../api/axios";
+import { toast } from "sonner";
+import { useAuthCtx } from "../../context/authContext";
 
-export function Layout() {
+const LogoutButton = () => {
+  const { setUser, user } = useAuthCtx();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await customAxios.get("/auth/logout");
+      setUser({
+        token: "",
+        role: [],
+        name: "",
+      });
+      navigate("/");
+      toast("User Logged Out.", {
+        description: `${new Intl.DateTimeFormat("en-GB", {
+          dateStyle: "full",
+          timeStyle: "long",
+          timeZone: "Asia/Kolkata",
+        }).format(Date.now())}`,
+      });
+    } catch (error) {
+      toast("Error while Loging Out.", {
+        description: error.response.data.message,
+      });
+    }
+  };
+  return !user.token ? (
+    <></>
+  ) : (
+    <Button
+      onClick={handleLogout}
+      variant="ghost"
+      className="w-full bg-red-500 text-white"
+      size="sm"
+    >
+      Logout
+    </Button>
+  );
+};
+
+export const Layout = () => {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex justify-between h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -119,13 +160,7 @@ export function Layout() {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Button
-                  variant="ghost"
-                  className="w-full bg-red-500 text-white"
-                  size="sm"
-                >
-                  Logout
-                </Button>
+                <LogoutButton />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -136,4 +171,4 @@ export function Layout() {
       </main>
     </div>
   );
-}
+};

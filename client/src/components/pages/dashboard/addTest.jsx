@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useStandards from "../../../hooks/query/useStandards";
 import { useForm } from "react-hook-form";
 import useSubjects from "../../../hooks/query/useSubjects";
@@ -25,6 +25,7 @@ import { CalendarIcon, Trash, UploadIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "../../../lib/utils";
 import useAddTest from "../../../hooks/mutation/useAddTest";
+import { buttonVariants } from "../../ui/button";
 
 const MDX = React.lazy(() => import("./mdx"));
 
@@ -286,13 +287,15 @@ const AddTest = () => {
               >
                 {addTest.isLoading ? <Loading /> : "Create Test"}
               </Button>
-              <Button
-                className="w-full"
-                variant="outline"
-                onClick={() => navigate(-1)}
+              <Link
+                to="/dashboard"
+                style={{
+                  pointerEvents: addTest.isLoading ? "none" : "auto",
+                }}
+                className={`${buttonVariants({ variant: "outline" })} w-full`}
               >
                 Cancel
-              </Button>
+              </Link>
             </div>
           </form>
         </div>

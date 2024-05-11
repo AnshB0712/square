@@ -9,7 +9,7 @@ const { validate } = require("../middlewares/validate.js");
 const { loginAdmin } = require("../controllers/auth/admin");
 const { verifyRole } = require("../middlewares/verifyRole");
 const { verifyJWT } = require("../middlewares/verifyJWT.js");
-const { refresh } = require("../controllers/auth/refreshtoken");
+const { refresh, logout } = require("../controllers/auth/refreshtoken");
 
 const {
   validateLoginAdmin,
@@ -32,5 +32,7 @@ authRouter.post(
 authRouter.post("/login/teacher", validate(validateLoginTeacher), loginTeacher);
 authRouter.post("/login/student", validate(validateLoginStudent), loginStudent);
 authRouter.post("/set-password", setPassword);
+
+authRouter.get("/logout", logout);
 
 module.exports = { authRouter };

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import {
   flexRender,
@@ -31,6 +31,7 @@ import { useForm } from "react-hook-form";
 import useMarsksheetDetails from "../../../hooks/query/useMarsksheetDetails";
 import { Loading } from "../../layout/loading";
 import useAddMarksheet from "../../../hooks/mutation/useAddMarksheet";
+import { buttonVariants } from "../../ui/button";
 
 const T = ({ testId, data, form, columns }) => {
   const [sorting, setSorting] = React.useState([]);
@@ -199,15 +200,15 @@ const T = ({ testId, data, form, columns }) => {
             >
               {addMarksheet.isLoading ? <Loading /> : "Create Marksheet"}
             </Button>
-            <Button
-              disable={addMarksheet.isLoading}
-              className="w-full"
-              variant="outline"
-              size="lg"
-              onClick={() => navigate(-1)}
+            <Link
+              to="/dashboard"
+              style={{
+                pointerEvents: addMarksheet.isLoading ? "none" : "auto",
+              }}
+              className={`${buttonVariants({ variant: "outline" })} w-full`}
             >
-              {"Cancel"}
-            </Button>
+              Cancel
+            </Link>
           </div>
         </form>
       </Form>

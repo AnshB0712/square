@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useStandards from "../../../hooks/query/useStandards";
 import { useForm } from "react-hook-form";
 import { PlusIcon, MinusIcon } from "lucide-react";
@@ -17,6 +17,7 @@ import useSubjects from "../../../hooks/query/useSubjects";
 import { useEffect, useState } from "react";
 import useAddTeacher from "../../../hooks/mutation/useAddTeacher";
 import { Loading } from "../../layout/loading";
+import { buttonVariants } from "../../ui/button";
 
 const SelectPicker = ({
   standards,
@@ -242,16 +243,15 @@ const AddTeacher = () => {
               >
                 {addTeacher.isLoading ? <Loading /> : "Add Teacher"}
               </Button>
-              <Button
-                disabled={addTeacher.isLoading}
-                variant="outline"
-                className="w-full"
-                onClick={() => {
-                  navigate(-1);
+              <Link
+                to="/dashboard"
+                style={{
+                  pointerEvents: addTeacher.isLoading ? "none" : "auto",
                 }}
+                className={`${buttonVariants({ variant: "outline" })} w-full`}
               >
                 Cancel
-              </Button>
+              </Link>
             </div>
           </form>
         </div>

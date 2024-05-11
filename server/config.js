@@ -16,6 +16,8 @@ module.exports = {
   SENDGRID_USER: process.env.SENDGRID_USER,
   MONGO_URL: process.env.MONGO_URL,
   JWT_KEY: process.env.JWT_SECRET_KEY,
+  JWT_ACCESS_EXP: process.env.JWT_ACCESS_EXP,
+  JWT_REFRESH_EXP: process.env.JWT_REFRESH_EXP,
   AWS_S3_ID: process.env.PUBLIC_AWS_S3_ID,
   AWS_S3_SECRET_KEY: process.env.PUBLIC_AWS_S3_SECRET_KEY,
   PUBLIC_AWS_S3_BUCKET_NAME: process.env.PUBLIC_AWS_S3_BUCKET_NAME,
