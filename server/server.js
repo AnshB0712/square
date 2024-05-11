@@ -7,8 +7,6 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
-console.log(FRONTEND_URL);
-
 const corsOptions = {
   origin: [FRONTEND_URL],
   credentials: true,
@@ -35,6 +33,16 @@ const { errorMiddleware } = require("./src/api/v1/middlewares/errorMiddleware");
 const { connectToDB } = require("./src/api/v1/utils/connectToDB");
 const { APIError } = require("./src/api/v1/utils/apiError");
 const { seed } = require("./src/api/v1/scripts/seed");
+const { StatusCodes } = require("http-status-codes");
+
+// For Testing Purpose
+app.get("/", (req, res) =>
+  res.status(StatusCodes.OK).json({
+    success: true,
+    data: {},
+    message: "Server is Ready.",
+  })
+);
 
 app.use("/api/v1", router);
 
