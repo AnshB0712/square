@@ -10,7 +10,7 @@ import {
 import { Outlet, useNavigate } from "react-router-dom";
 import RecentTests from "./RecentTests";
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const navigate = useNavigate();
   return (
     <>
@@ -86,4 +86,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

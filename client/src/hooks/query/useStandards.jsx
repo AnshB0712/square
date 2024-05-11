@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { customAxios } from "../../api/axios";
 
 const getStandards = async () => {
