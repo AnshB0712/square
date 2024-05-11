@@ -1,10 +1,8 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "react-query";
 import { customAxios } from "../../api/axios.js";
 import { SplashScreen } from "./splashScreen.jsx";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthCtx } from "../../context/authContext.jsx";
-import { Suspense } from "react";
-import { Loading } from "./loading.jsx";
 
 const refreshSession = async () => {
   const { data } = await customAxios("/auth/refresh-session");
@@ -12,13 +10,12 @@ const refreshSession = async () => {
 };
 
 export const PersistUser = () => {
-  const { setUser, user } = useAuthCtx();
-  const { isError, isLoading } = useSuspenseQuery({
+  const { setUser } = useAuthCtx();
+  const { isError, isLoading } = useQuery({
     queryKey: ["refresh-session"],
     queryFn: refreshSession,
     staleTime: Infinity,
     onSuccess: (e) => setUser(e.data),
-    enabled: !user.token,
   });
 
   if (isLoading) return <SplashScreen />;
@@ -27,9 +24,5 @@ export const PersistUser = () => {
     return <Navigate to={"/"} />;
   }
 
-  return (
-    <Suspense fallback={<Loading />}>
-      <Outlet />
-    </Suspense>
-  );
+  return <Outlet />;
 };
