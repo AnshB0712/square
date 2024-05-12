@@ -21,7 +21,7 @@ const validateLoginStudent = {
 const validateLoginTeacher = {
   body: Joi.object()
     .keys({
-      uniqueField: Joi.number().required(),
+      uniqueField: Joi.string().required(),
       password: Joi.string().required(),
     })
     .required(),

@@ -95,41 +95,56 @@ export const columns = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="outline" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <EllipsisVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
-              {row.original.marksheetCreated ? (
-                <Link
-                  to={`/marksheet/test/${row.original["_id"]}`}
-                  className="underline"
-                  style={{ color: "#7549C4" }}
-                >
-                  Edit Marksheet
-                </Link>
-              ) : (
-                <Link
-                  to={`/marksheet/new/${row.original["_id"]}`}
-                  className="underline"
-                  style={{ color: "#7549C4" }}
-                >
-                  Add Marksheet
-                </Link>
-              )}
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link
-                to={`/edit/test/${row.original["_id"]}`}
-                className="underline"
-                style={{ color: "#7549C4" }}
-              >
-                Edit Test
-              </Link>
-            </DropdownMenuItem>
+            {row.original.canTakeAction ? (
+              <>
+                <DropdownMenuItem>
+                  {row.original.marksheetCreated ? (
+                    <Link
+                      to={`/marksheet/test/${row.original["_id"]}`}
+                      className="underline"
+                      style={{ color: "#7549C4" }}
+                    >
+                      Edit Marksheet
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/marksheet/new/${row.original["_id"]}`}
+                      className="underline"
+                      style={{ color: "#7549C4" }}
+                    >
+                      Add Marksheet
+                    </Link>
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link
+                    to={`/edit/test/${row.original["_id"]}`}
+                    className="underline"
+                    style={{ color: "#7549C4" }}
+                  >
+                    Edit Test
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem>
+                  <p
+                    className="font-medium italic"
+                    style={{ color: "#7549C4" }}
+                  >
+                    Test is not created by you.
+                  </p>
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -137,24 +137,29 @@ const getTests = async (req, res) => {
   const academicYear = req.academicYear;
   let t;
 
-  if (user.role.includes("ADMIN")) {
-    t = await Test.find({ academicYear })
-      .populate("standard")
-      .populate("subject")
-      .populate("assignedTo")
-      .sort({ on: 1 })
-      .lean();
-  } else {
-    t = await Test.find({
-      academicYear,
-      createdBy: user._id,
-      assignedTo: user._id,
-    })
-      .populate("standard")
-      .populate("subject")
-      .populate("assignedTo")
-      .sort({ on: 1 })
-      .lean();
+  t = await Test.find({ academicYear })
+    .populate("standard")
+    .populate("subject")
+    .populate("assignedTo", ["name", "role", "_id"])
+    .populate("createdBy", ["name", "role", "_id"])
+    .sort({ on: 1 })
+    .lean();
+
+  // Adding Boolean for Frontend to know on what test a Logged-In user can EDIT-TEST/MAKE-MARKSHEET-OF-TEST/EDIT-MARKSHEET
+  if (t?.length) {
+    t = t.map((test) => {
+      let canTakeAction = false;
+
+      if (
+        test.createdBy._id.toString() === user._id ||
+        test.assignedTo._id.toString() === user._id ||
+        user.role.includes("ADMIN")
+      ) {
+        canTakeAction = true;
+      }
+
+      return { ...test, canTakeAction };
+    });
   }
 
   res.status(200).json({
