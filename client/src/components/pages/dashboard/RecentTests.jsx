@@ -1,11 +1,10 @@
-import { Layers3, RefreshCw } from "lucide-react";
+import { ExternalLink, Layers3 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import TestTable from "./TestTable";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { buttonVariants } from "../../ui/button";
 
 const RecentTests = () => {
-  const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-2">
       <article className=" flex justify-between gap-2">
@@ -15,14 +14,15 @@ const RecentTests = () => {
             Recent Tests in Tuition.
           </h1>
         </div>
-        <Button
-          onClick={() => navigate("/test-table")}
-          variant="outline"
-          size="icon"
-          className="h-8 w-8"
+        <Link
+          className={`${buttonVariants({
+            variant: "outline",
+            size: "icon",
+          })} h-8 w-8`}
+          to="/test-table"
         >
-          <RefreshCw className="h-4 w-4 text-muted-foreground" />
-        </Button>
+          <ExternalLink className="h-4 w-4 text-muted-foreground" />
+        </Link>
       </article>
       <Card>
         <CardContent className="p-2 text-center">

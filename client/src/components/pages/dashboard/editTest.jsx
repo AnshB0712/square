@@ -306,21 +306,21 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
 
               <div className="space-y-3">
                 <Button
-                  disabled={updateTest.isLoading || deleteTest.isLoading}
+                  disabled={updateTest.isPending || deleteTest.isPending}
                   className="w-full"
                   type="submit"
                   size="lg"
                 >
-                  {updateTest.isLoading ? <Loading /> : "Update"}
+                  {updateTest.isPending ? <Loading /> : "Update"}
                 </Button>
                 <Button
                   className="w-full border-red-500 text-red-500"
                   variant="outline"
                   size="lg"
                   onClick={handleDeleteTest}
-                  disabled={updateTest.isLoading || deleteTest.isLoading}
+                  disabled={updateTest.isPending || deleteTest.isPending}
                 >
-                  {deleteTest.isLoading ? <Loading /> : "Delete Test"}
+                  {deleteTest.isPending ? <Loading /> : "Delete Test"}
                 </Button>
               </div>
             </form>

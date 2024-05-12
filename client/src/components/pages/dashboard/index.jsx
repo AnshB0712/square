@@ -1,5 +1,4 @@
 import { Command, Newspaper } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -7,11 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import RecentTests from "./RecentTests";
+import { buttonVariants } from "../../ui/button";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   return (
     <>
       <article className=" flex flex-col gap-2">
@@ -33,9 +32,12 @@ const Dashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardFooter>
-              <Button onClick={() => navigate("add-student")}>
+              <Link
+                to="/student/new"
+                className={buttonVariants({ variabt: "default:" })}
+              >
                 Add New Student
-              </Button>
+              </Link>
             </CardFooter>
           </Card>
           <Card className="sm:col-span-2 min-w-[90%]">
@@ -49,9 +51,12 @@ const Dashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardFooter>
-              <Button onClick={() => navigate("add-teacher")}>
+              <Link
+                to="/teacher/new"
+                className={buttonVariants({ variabt: "default:" })}
+              >
                 Add New Teacher
-              </Button>
+              </Link>
             </CardFooter>
           </Card>
         </div>
@@ -74,12 +79,16 @@ const Dashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardFooter>
-              <Button onClick={() => navigate("add-test")}>Add New Test</Button>
+              <Link
+                to="/test/new"
+                className={buttonVariants({ variabt: "default:" })}
+              >
+                Add New Test
+              </Link>
             </CardFooter>
           </Card>
         </div>
       </article>
-      <Outlet />
       <br />
       <RecentTests />
     </>

@@ -24,7 +24,7 @@ const usePrivateAxios = () => {
       (res) => res,
       async (err) => {
         const prevReq = err?.config;
-        if (err?.response?.status === 409 && !prevReq?.sent) {
+        if (err?.response?.status === 403 && !prevReq?.sent) {
           prevReq.sent = true;
           const token = await refreshAccessToken();
           setUser((p) => ({ ...p, token }));

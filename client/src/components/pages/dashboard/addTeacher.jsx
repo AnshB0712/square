@@ -7,7 +7,6 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
-import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import useStandards from "../../../hooks/query/useStandards";
@@ -156,8 +155,6 @@ const AddTeacher = () => {
       return;
     }
 
-    console.log(details);
-
     addTeacher.mutate(details, {
       onError: (e) => {
         setError("formError", {
@@ -172,16 +169,16 @@ const AddTeacher = () => {
   };
 
   return (
-    <AlertDialog open>
-      <AlertDialogContent className="w-[95%] max-w-lg rounded-lg">
-        <div className="mx-auto max-w-md space-y-6">
+    <>
+      <div className="max-w-lg rounded-lg">
+        <div className="mx-auto max-w-md ">
           <div className="space-y-2 text-center">
             <h1 className="text-xl font-bold">Add a Teacher</h1>
             <p className="text-gray-500 dark:text-gray-400">
               Fill out the form to add a new teacher.
             </p>
           </div>
-          <form onSubmit={handleSubmit(handleAddTeacher)} className="space-y-4">
+          <form onSubmit={handleSubmit(handleAddTeacher)} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
@@ -232,21 +229,21 @@ const AddTeacher = () => {
               </p>
             )}
 
-            <div className="space-y-3 my-3">
+            <div className="space-y-2">
               <Button
-                disabled={addTeacher.isLoading}
+                disabled={addTeacher.isPending}
                 className="w-full"
                 onClick={() => {
                   clearErrors();
                 }}
                 type="submit"
               >
-                {addTeacher.isLoading ? <Loading /> : "Add Teacher"}
+                {addTeacher.isPending ? <Loading /> : "Add Teacher"}
               </Button>
               <Link
                 to="/dashboard"
                 style={{
-                  pointerEvents: addTeacher.isLoading ? "none" : "auto",
+                  pointerEvents: addTeacher.isPending ? "none" : "auto",
                 }}
                 className={`${buttonVariants({ variant: "outline" })} w-full`}
               >
@@ -255,8 +252,8 @@ const AddTeacher = () => {
             </div>
           </form>
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </div>
+    </>
   );
 };
 

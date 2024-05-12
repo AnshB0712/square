@@ -105,7 +105,7 @@ export const columns = [
             <DropdownMenuItem>
               {row.original.marksheetCreated ? (
                 <Link
-                  to={`/edit/marksheet/test/${row.original["_id"]}`}
+                  to={`/marksheet/test/${row.original["_id"]}`}
                   className="underline"
                   style={{ color: "#7549C4" }}
                 >
@@ -113,7 +113,7 @@ export const columns = [
                 </Link>
               ) : (
                 <Link
-                  to={`/marksheet/test/${row.original["_id"]}`}
+                  to={`/marksheet/new/${row.original["_id"]}`}
                   className="underline"
                   style={{ color: "#7549C4" }}
                 >

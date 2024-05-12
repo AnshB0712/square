@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Loading } from "../layout/loading.jsx";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -196,7 +197,7 @@ export function LoginForm() {
               size="lg"
               type="submit"
             >
-              Login
+              {login.isPending ? <Loading /> : "Login"}
             </Button>
           </form>
         </div>
