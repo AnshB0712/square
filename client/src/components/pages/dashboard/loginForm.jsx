@@ -197,11 +197,7 @@ export function LoginForm() {
               size="lg"
               type="submit"
             >
-<<<<<<< HEAD
-              {login.isLoading ? <Loading /> : "Login"}
-=======
               {login.isPending ? <Loading /> : "Login"}
->>>>>>> main
             </Button>
           </form>
         </div>
