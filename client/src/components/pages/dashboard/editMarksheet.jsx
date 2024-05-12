@@ -192,11 +192,7 @@ const T = ({ testId, data, form, columns }) => {
 
           <div className="space-y-3">
             <Button
-<<<<<<< HEAD
-              disabled={updateMarksheet.isLoading}
-=======
               disable={updateMarksheet.isPending}
->>>>>>> main
               className="w-full"
               type="submit"
               size="lg"
