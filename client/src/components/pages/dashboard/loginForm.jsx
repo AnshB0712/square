@@ -194,7 +194,6 @@ export function LoginForm() {
             <Button
               disabled={!role || login.isLoading}
               className="w-full my-2"
-              size="lg"
               type="submit"
             >
               {login.isPending ? <Loading /> : "Login"}

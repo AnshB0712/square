@@ -309,14 +309,12 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                   disabled={updateTest.isPending || deleteTest.isPending}
                   className="w-full"
                   type="submit"
-                  size="lg"
                 >
                   {updateTest.isPending ? <Loading /> : "Update"}
                 </Button>
                 <Button
                   className="w-full border-red-500 text-red-500"
                   variant="outline"
-                  size="lg"
                   onClick={handleDeleteTest}
                   disabled={updateTest.isPending || deleteTest.isPending}
                 >
