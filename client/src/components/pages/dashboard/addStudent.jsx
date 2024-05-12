@@ -8,8 +8,6 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
-import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
-
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import useStandards from "../../../hooks/query/useStandards";
@@ -45,9 +43,9 @@ const AddStudent = () => {
   };
 
   return (
-    <AlertDialog open>
-      <AlertDialogContent className="w-[95%] max-w-lg rounded-lg">
-        <div className="mx-auto max-w-md space-y-6">
+    <>
+      <>
+        <div className="mx-auto max-w-md">
           <div className="space-y-2 text-center">
             <h1 className="text-xl font-bold">Add Student</h1>
             <p className="text-gray-500 dark:text-gray-400">
@@ -55,7 +53,7 @@ const AddStudent = () => {
             </p>
           </div>
           <form
-            className="space-y-4"
+            className="space-y-6"
             onSubmit={(e) =>
               handleSubmit((d) => {
                 clearErrors();
@@ -63,7 +61,7 @@ const AddStudent = () => {
               })(e)
             }
           >
-            <div className="space-y-1">
+            <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 {...register("name", { required: true })}
@@ -74,7 +72,7 @@ const AddStudent = () => {
                 }`}
               />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
               <Input
                 {...register("phone", { required: true })}
@@ -86,7 +84,7 @@ const AddStudent = () => {
                 }`}
               />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-2">
               <Label htmlFor="fees">Fees</Label>
               <Input
                 {...register("fees", { required: true })}
@@ -98,7 +96,7 @@ const AddStudent = () => {
                 }`}
               />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-2">
               <Label htmlFor="standard">Standard</Label>
               {isLoading ? (
                 <p className="flex justify-center">
@@ -136,16 +134,19 @@ const AddStudent = () => {
               </p>
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-2 mt-auto">
               <Button
-                disabled={addStudent.isLoading}
+                disabled={addStudent.isPending}
                 className="w-full"
                 type="submit"
               >
-                {addStudent.isLoading ? <Loading /> : "Add Student"}
+                {addStudent.isPending ? <Loading /> : "Add Student"}
               </Button>
               <Link
                 to="/dashboard"
+                style={{
+                  pointerEvents: addStudent.isPending ? "none" : "auto",
+                }}
                 className={`${buttonVariants({ variant: "outline" })} w-full`}
               >
                 Cancel
@@ -153,8 +154,8 @@ const AddStudent = () => {
             </div>
           </form>
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </>
+    </>
   );
 };
 

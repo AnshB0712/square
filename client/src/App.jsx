@@ -18,18 +18,14 @@ const App = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<LoginForm />} />
           <Route element={<PersistUser />}>
-            <Route path="/dashboard" element={<Dashboard />}>
-              <Route path="add-student" element={<AddStudent />} />
-              <Route path="add-teacher" element={<AddTeacher />} />
-              <Route path="add-test" element={<AddTest />} />
-            </Route>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/student/new" element={<AddStudent />} />
+            <Route path="/teacher/new" element={<AddTeacher />} />
+            <Route path="/test/new" element={<AddTest />} />
+            <Route path="/test/:testId" element={<EditTest />} />
+            <Route path="/marksheet/new/:testId" element={<Marksheet />} />
+            <Route path="/marksheet/test/:testId" element={<EditMarksheet />} />
             <Route path="/test-table" element={<FullTestTable />} />
-            <Route path="/edit/test/:testId" element={<EditTest />} />
-            <Route path="/marksheet/test/:testId" element={<Marksheet />} />
-            <Route
-              path="/edit/marksheet/test/:testId"
-              element={<EditMarksheet />}
-            />
           </Route>
         </Route>
       </Routes>

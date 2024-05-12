@@ -10,7 +10,6 @@ import {
   Select,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
-import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import {
   Popover,
   PopoverContent,
@@ -137,9 +136,9 @@ const AddTest = () => {
   };
 
   return (
-    <AlertDialog open>
-      <AlertDialogContent className="w-full max-h-full overflow-scroll max-w-lg rounded-lg">
-        <div className="mx-auto max-w-md space-y-6">
+    <>
+      <div className="w-full max-h-full overflow-scroll max-w-lg rounded-lg">
+        <div className="mx-auto max-w-md ">
           <div className="space-y-2 text-center">
             <h1 className="text-xl font-bold">Create Test</h1>
             <p className="text-gray-500 dark:text-gray-400">
@@ -147,7 +146,7 @@ const AddTest = () => {
             </p>
           </div>
           <form
-            className="space-y-4"
+            className="space-y-6"
             onSubmit={(e) => {
               clearErrors();
               handleSubmit((d) => {
@@ -281,16 +280,16 @@ const AddTest = () => {
 
             <div className="space-y-3">
               <Button
-                disabled={addTest.isLoading}
+                disabled={addTest.isPending}
                 className="w-full"
                 type="submit"
               >
-                {addTest.isLoading ? <Loading /> : "Create Test"}
+                {addTest.isPending ? <Loading /> : "Create Test"}
               </Button>
               <Link
                 to="/dashboard"
                 style={{
-                  pointerEvents: addTest.isLoading ? "none" : "auto",
+                  pointerEvents: addTest.isPending ? "none" : "auto",
                 }}
                 className={`${buttonVariants({ variant: "outline" })} w-full`}
               >
@@ -299,8 +298,8 @@ const AddTest = () => {
             </div>
           </form>
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </div>
+    </>
   );
 };
 

@@ -58,44 +58,6 @@ export const Layout = () => {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex justify-between h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-        <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-          <Link
-            to="#"
-            className="flex items-center gap-2 text-lg font-semibold md:text-base"
-          >
-            <img src={logo} className="w-32 h-32" />
-          </Link>
-          <Link
-            to="#"
-            className="text-foreground transition-colors hover:text-foreground"
-          >
-            Dashboard
-          </Link>
-          <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Orders
-          </Link>
-          <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Products
-          </Link>
-          <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Customers
-          </Link>
-          <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Analytics
-          </Link>
-        </nav>
         <Sheet open={false}>
           <SheetTrigger asChild>
             <Button
@@ -146,7 +108,9 @@ export const Layout = () => {
           </SheetContent>
         </Sheet>
         <div className="relative">
-          <img src={logo} className="w-32 h-32 text-blue-500" />
+          <Link to="/dashboard">
+            <img src={logo} className="w-32 h-32" />
+          </Link>
         </div>
         <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
           <DropdownMenu>

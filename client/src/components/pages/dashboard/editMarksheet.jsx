@@ -192,17 +192,21 @@ const T = ({ testId, data, form, columns }) => {
 
           <div className="space-y-3">
             <Button
+<<<<<<< HEAD
               disabled={updateMarksheet.isLoading}
+=======
+              disable={updateMarksheet.isPending}
+>>>>>>> main
               className="w-full"
               type="submit"
               size="lg"
             >
-              {updateMarksheet.isLoading ? <Loading /> : "Update Marksheet"}
+              {updateMarksheet.isPending ? <Loading /> : "Update Marksheet"}
             </Button>
             <Link
               to="/dashboard"
               style={{
-                pointerEvents: updateMarksheet.isLoading ? "none" : "auto",
+                pointerEvents: updateMarksheet.isPending ? "none" : "auto",
               }}
               className={`${buttonVariants({ variant: "outline" })} w-full`}
             >
