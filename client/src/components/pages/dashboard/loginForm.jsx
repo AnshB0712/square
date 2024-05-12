@@ -16,11 +16,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loading } from "../layout/loading.jsx";
+import { Loading } from "../../layout/loading.jsx";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useLogin } from "../../hooks/mutation/useLogin.jsx";
+import { useLogin } from "../../../hooks/mutation/useLogin.jsx";
 
 const FormFieldRender = ({ role, register, errors }) => {
   let content;
@@ -186,8 +186,8 @@ export function LoginForm() {
             />
 
             {formState.errors["formError"] && (
-              <p className="text-[0.8rem] text-red-600 text-center">
-                {formState.errors["formError"].message}
+              <p className="text-[0.8rem] font-medium italic text-red-600 text-center">
+                Error: {formState.errors["formError"].message}
               </p>
             )}
 
