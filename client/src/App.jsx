@@ -11,6 +11,7 @@ import FullTestTable from "./components/pages/dashboard/FullTestTable.jsx";
 import Marksheet from "./components/pages/dashboard/marksheet.jsx";
 import EditMarksheet from "./components/pages/dashboard/editMarksheet.jsx";
 import RBARoute from "./components/layout/RBARoute.jsx";
+import ViewTest from "./components/pages/dashboard/viewTest.jsx";
 
 const App = () => {
   return (
@@ -45,10 +46,18 @@ const App = () => {
               }
             />
             <Route
-              path="/test/:testId"
+              path="/edit/test/:testId"
               element={
                 <RBARoute roles={["ADMIN", "TEACHER"]}>
                   <EditTest />
+                </RBARoute>
+              }
+            />
+            <Route
+              path="/view/test/:testId"
+              element={
+                <RBARoute roles={["ADMIN", "TEACHER", "STUDENT"]}>
+                  <ViewTest />
                 </RBARoute>
               }
             />

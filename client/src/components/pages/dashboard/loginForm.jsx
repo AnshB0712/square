@@ -22,37 +22,73 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../../hooks/mutation/useLogin.jsx";
 
-const FormFieldRender = ({ role, register, errors }) => {
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const FormFieldRender = ({ role, form }) => {
   let content;
 
   switch (role) {
     case "teacher":
       content = (
         <>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email/Phone</Label>
-            <Input
-              {...register("uniqueField", { required: true })}
-              id="email"
+          <div className="space-y-1">
+            <FormField
+              control={form.control}
               name="uniqueField"
-              type="text"
-              className={`${
-                errors["uniqueField"] ? "border-red-600 text-red-600" : ""
-              }`}
+              rules={{ required: true }}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Email/Phone</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        size="lg"
+                        name="uniqueField"
+                        type="text"
+                        className={`${
+                          form?.errors?.["uniqueField"]
+                            ? "border-red-600 text-red-600"
+                            : ""
+                        }`}
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
             />
           </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-            </div>
-            <Input
-              {...register("password", { required: true })}
-              id="password"
+          <div className="space-y-1">
+            <FormField
+              control={form.control}
               name="password"
-              type="password"
-              className={`${
-                errors["password"] ? "border-red-600 text-red-600" : ""
-              }`}
+              rules={{ required: true }}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        size="lg"
+                        type="password"
+                        className={`${
+                          form?.errors?.["password"]
+                            ? "border-red-600 text-red-600"
+                            : ""
+                        }`}
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
             />
           </div>
         </>
@@ -61,30 +97,56 @@ const FormFieldRender = ({ role, register, errors }) => {
     case "admin":
       content = (
         <>
-          <div className="grid gap-2">
-            <Label htmlFor="phone">Phone</Label>
-            <Input
-              {...register("phone", { required: true })}
-              id="phone"
+          <div className="space-y-1">
+            <FormField
+              control={form.control}
               name="phone"
-              type="phone"
-              className={`${
-                errors["phone"] ? "border-red-600 text-red-600" : ""
-              }`}
+              rules={{ required: true }}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        size="lg"
+                        type="text"
+                        className={`${
+                          form?.errors?.["phone"]
+                            ? "border-red-600 text-red-600"
+                            : ""
+                        }`}
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
             />
           </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-            </div>
-            <Input
-              {...register("password", { required: true })}
-              id="password"
+          <div className="space-y-1">
+            <FormField
+              control={form.control}
+              rules={{ required: true }}
               name="password"
-              type="password"
-              className={`${
-                errors["password"] ? "border-red-600 text-red-600" : ""
-              }`}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        size="lg"
+                        type="password"
+                        className={`${
+                          form?.errors?.["password"]
+                            ? "border-red-600 text-red-600"
+                            : ""
+                        }`}
+                      />
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
             />
           </div>
         </>
@@ -93,21 +155,34 @@ const FormFieldRender = ({ role, register, errors }) => {
     case "student":
       content = (
         <>
-          <div className="grid gap-2">
-            <Label htmlFor="roll">Roll No.</Label>
-            <Input
-              {...register("roll", { required: true })}
-              id="roll"
+          <div className="space-y-1">
+            <FormField
+              control={form.control}
+              rules={{ required: true }}
               name="roll"
-              type="number"
-              placeholder="000000"
-              className={`${
-                errors["roll"] ? "border-red-600 text-red-600" : ""
-              }`}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>roll</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        size="lg"
+                        type="number"
+                        className={`${
+                          form?.errors?.["roll"]
+                            ? "border-red-600 text-red-600"
+                            : ""
+                        }`}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-[0.8rem] text-muted-foreground">
+                      Enter the unique roll that class have provided to you.
+                    </FormMessage>
+                  </FormItem>
+                );
+              }}
             />
-            <p className="text-[0.8rem] text-muted-foreground">
-              Enter the unique roll that class have provided to you.
-            </p>
           </div>
         </>
       );
@@ -121,8 +196,7 @@ const FormFieldRender = ({ role, register, errors }) => {
 
 export function LoginForm() {
   const [role, setRole] = useState("");
-  const { register, handleSubmit, reset, formState, setError, clearErrors } =
-    useForm();
+  const form = useForm();
   const navigate = useNavigate();
   const login = useLogin(`auth/login/${role}`);
 
@@ -133,7 +207,7 @@ export function LoginForm() {
       },
       {
         onError: (e) =>
-          setError("formError", {
+          form.setError("formError", {
             type: "custom",
             message: e.response.data.message,
           }),
@@ -143,7 +217,7 @@ export function LoginForm() {
   };
 
   useEffect(() => {
-    reset();
+    form.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role]);
 
@@ -158,9 +232,9 @@ export function LoginForm() {
       <CardContent>
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email">Who are you?</Label>
+            <Label>Who are you?</Label>
             <Select onValueChange={(e) => setRole(e)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" size="lg">
                 <SelectValue placeholder="Select you Role" value={role} />
               </SelectTrigger>
               <SelectContent>
@@ -172,33 +246,32 @@ export function LoginForm() {
               </SelectContent>
             </Select>
           </div>
-          <form
-            className="grid gap-3"
-            onSubmit={(e) => {
-              clearErrors();
-              handleSubmit(handleLogin)(e);
-            }}
-          >
-            <FormFieldRender
-              role={role}
-              register={register}
-              errors={formState.errors}
-            />
-
-            {formState.errors["formError"] && (
-              <p className="text-[0.8rem] font-medium italic text-red-600 text-center">
-                Error: {formState.errors["formError"].message}
-              </p>
-            )}
-
-            <Button
-              disabled={!role || login.isLoading}
-              className="w-full my-2"
-              type="submit"
+          <Form {...form}>
+            <form
+              className="space-y-5"
+              onSubmit={(e) => {
+                form.clearErrors();
+                form.handleSubmit(handleLogin)(e);
+              }}
             >
-              {login.isPending ? <Loading /> : "Login"}
-            </Button>
-          </form>
+              <FormFieldRender role={role} form={form} />
+
+              {form.formState.errors["formError"] && (
+                <p className="text-[0.8rem] font-medium italic text-red-600 text-center">
+                  Error: {form.formState.errors["formError"].message}
+                </p>
+              )}
+
+              <Button
+                disabled={!role || login.isPending}
+                className="w-full my-2"
+                size="lg"
+                type="submit"
+              >
+                {login.isPending ? <Loading /> : "Login"}
+              </Button>
+            </form>
+          </Form>
         </div>
       </CardContent>
     </Card>

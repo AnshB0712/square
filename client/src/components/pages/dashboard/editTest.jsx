@@ -44,40 +44,16 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
   const navigate = useNavigate();
   const { on, name, description, standard, subject } = data.data.data;
   const form = useForm({
-    defaultValues: { on, name, description, standard, subject },
+    defaultValues: {
+      on,
+      name,
+      description,
+      standard: standard._id,
+      subject: subject._id,
+    },
   });
 
   const handleUpdateTest = (details) => {
-    if (!details.standard) {
-      form.setError("standard", {
-        type: "custom",
-        required: true,
-      });
-      return;
-    }
-    if (!details.subject) {
-      form.setError("subject", {
-        type: "custom",
-        required: true,
-      });
-      return;
-    }
-    if (!details.on) {
-      form.setError("on", {
-        type: "custom",
-        required: true,
-      });
-      return;
-    }
-    if (!details.description) {
-      form.setError("formError", {
-        type: "custom",
-        required: true,
-        message: "Description is Mandatory.",
-      });
-      return;
-    }
-
     updateTest.mutate(
       {
         id: testId,
@@ -138,12 +114,14 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                 <FormField
                   control={form.control}
                   name="name"
+                  rules={{ required: true }}
                   render={({ field }) => {
                     return (
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <Input
                           id="name"
+                          size="lg"
                           placeholder="Unit/SA/Final/Weekly"
                           value={field.value}
                           onChange={field.onChange}
@@ -162,6 +140,7 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                 <FormField
                   control={form.control}
                   name="description"
+                  rules={{ required: true }}
                   render={({ field }) => {
                     return (
                       <FormItem>
@@ -182,6 +161,7 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                   <FormField
                     control={form.control}
                     name="standard"
+                    rules={{ required: true }}
                     render={({ field }) => {
                       return (
                         <FormItem>
@@ -191,7 +171,7 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                             value={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger size="lg">
                                 <SelectValue placeholder="Select Standard" />
                               </SelectTrigger>
                             </FormControl>
@@ -217,6 +197,7 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                   <FormField
                     control={form.control}
                     name="subject"
+                    rules={{ required: true }}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Subject</FormLabel>
@@ -225,7 +206,7 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger size="lg">
                               <SelectValue placeholder="Select Subject" />
                             </SelectTrigger>
                           </FormControl>
@@ -242,10 +223,10 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                   />
                 }
               </div>
-
               <div className="space-y-1">
                 <FormField
                   control={form.control}
+                  rules={{ required: true }}
                   name="on"
                   render={({ field }) => {
                     return (
@@ -256,6 +237,7 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                             <PopoverTrigger asChild>
                               <Button
                                 variant={"outline"}
+                                size="lg"
                                 className={`${
                                   form.formState.errors["on"]
                                     ? "border-red-600 text-red-600"
@@ -295,20 +277,18 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                   }}
                 />
               </div>
-
               {form.formState.errors["formError"] && (
                 <FormMessage className="text-[0.8rem text-red-500 text-center italic">
                   Error: {form.formState.errors["formError"].message}
                 </FormMessage>
               )}
-
               <Separator />
-
               <div className="space-y-3">
                 <Button
                   disabled={updateTest.isPending || deleteTest.isPending}
                   className="w-full"
                   type="submit"
+                  size="lg"
                 >
                   {updateTest.isPending ? <Loading /> : "Update"}
                 </Button>
@@ -316,6 +296,7 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                   className="w-full border-red-500 text-red-500"
                   variant="outline"
                   onClick={handleDeleteTest}
+                  size="lg"
                   disabled={updateTest.isPending || deleteTest.isPending}
                 >
                   {deleteTest.isPending ? <Loading /> : "Delete Test"}

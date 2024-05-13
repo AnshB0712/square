@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
 import logo from "../../assets/logo.svg";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { customAxios } from "../../api/axios";
@@ -51,6 +52,40 @@ const LogoutButton = () => {
     >
       Logout
     </Button>
+  );
+};
+
+const AvatarDropdown = () => {
+  const { user } = useAuthCtx();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary" size="icon" className="rounded-full">
+          <CircleUser className="h-5 w-5" />
+          <span className="sr-only">Toggle user menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[200px]">
+        <DropdownMenuLabel className="text-center">
+          My Account
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <div className="flex items-center justify-around">
+          <p className="text-xs font-medium px-2 py-1.5">{user.name}</p>
+          <Badge
+            variant="outline"
+            size="sm"
+            style={{ borderColor: "#7549C4", color: "#7549C4" }}
+          >
+            {user.role[0]}
+          </Badge>
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <LogoutButton />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
@@ -113,21 +148,7 @@ export const Layout = () => {
           </Link>
         </div>
         <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogoutButton />
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <AvatarDropdown />
         </div>
       </header>
       <main className="p-4">

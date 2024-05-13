@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import usePrivateAxios from "../usePrivateAxios";
 
@@ -12,6 +12,7 @@ const addMarksheet = async ({ details, testId }, axiosInstance) => {
 
 const useAddMarksheet = () => {
   const axios = usePrivateAxios();
+  const queryClient = useQueryClient();
   const mutate = useMutation({
     mutationFn: ({ details, testId }) =>
       addMarksheet({ details, testId }, axios),
@@ -23,6 +24,7 @@ const useAddMarksheet = () => {
           timeZone: "Asia/Kolkata",
         }).format(Date.now())}`,
       });
+      queryClient.invalidateQueries({ queryKey: ["marksheet"] });
     },
   });
   return mutate;

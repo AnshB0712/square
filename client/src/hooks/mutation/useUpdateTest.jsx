@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import usePrivateAxios from "../usePrivateAxios";
 
@@ -9,6 +9,7 @@ const updateTest = async (id, details, axiosInstance) => {
 
 const useUpdateTest = () => {
   const axios = usePrivateAxios();
+  const queryClient = useQueryClient();
   const mutate = useMutation({
     mutationFn: ({ id, details }) => updateTest(id, details, axios),
     onSuccess: () => {
@@ -19,6 +20,7 @@ const useUpdateTest = () => {
           timeZone: "Asia/Kolkata",
         }).format(Date.now())}`,
       });
+      queryClient.invalidateQueries({ queryKey: ["tests"] });
     },
   });
   return mutate;

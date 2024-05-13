@@ -10,10 +10,11 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 
-const MDX = ({ setValue, markdown }) => {
+const MDX = ({ setValue, markdown, readOnly = false }) => {
   return (
     <div>
       <MDXEditor
+        readOnly={readOnly}
         onChange={(e) => setValue("description", e)}
         markdown={markdown || "...Test Description..."}
         contentEditableClassName="prose"

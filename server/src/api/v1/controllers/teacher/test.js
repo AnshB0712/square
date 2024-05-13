@@ -102,7 +102,10 @@ const getSingleTest = async (req, res) => {
   const t = await Test.findOne({
     _id: testId,
     academicYear,
-  }).lean();
+  })
+    .populate("subject")
+    .populate("standard")
+    .lean();
 
   if (!t)
     throw new APIError(StatusCodes.NOT_FOUND, "No test found with this id.");

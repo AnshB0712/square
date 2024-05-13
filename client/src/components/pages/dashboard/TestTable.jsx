@@ -136,12 +136,13 @@ export const columns = [
             ) : (
               <>
                 <DropdownMenuItem>
-                  <p
-                    className="font-medium italic"
+                  <Link
+                    to={`/view/test/${row.original["_id"]}`}
+                    className="underline"
                     style={{ color: "#7549C4" }}
                   >
-                    Test is not created by you.
-                  </p>
+                    View Test Details
+                  </Link>
                 </DropdownMenuItem>
               </>
             )}

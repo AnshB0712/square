@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import usePrivateAxios from "../usePrivateAxios";
 
@@ -9,6 +9,7 @@ const deleteTest = async (id, axiosInstance) => {
 
 const useDeleteTest = () => {
   const axios = usePrivateAxios();
+  const queryClient = useQueryClient();
   const mutate = useMutation({
     mutationFn: ({ id }) => deleteTest(id, axios),
     onSuccess: () => {
@@ -19,6 +20,7 @@ const useDeleteTest = () => {
           timeZone: "Asia/Kolkata",
         }).format(Date.now())}`,
       });
+      queryClient.invalidateQueries({ queryKey: ["test"] });
     },
   });
   return mutate;

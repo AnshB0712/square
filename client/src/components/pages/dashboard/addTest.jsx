@@ -25,32 +25,42 @@ import { format } from "date-fns";
 import { cn } from "../../../lib/utils";
 import useAddTest from "../../../hooks/mutation/useAddTest";
 import { buttonVariants } from "../../ui/button";
+import { DevTool } from "@hookform/devtools";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 const MDX = React.lazy(() => import("./mdx"));
 
-const FileUpload = ({ onChange }) => {
-  const [files, setFiles] = useState([]);
+const FileUpload = ({ setValue }) => {
+  const [f, setF] = useState([]);
 
   const handleChange = (e) => {
-    setFiles(Array.from(e.target.files));
+    setF(Array.from(e.target.files));
   };
 
   const handleDelete = (i) => {
-    setFiles((p) => p.filter((file, index) => index !== i));
+    setF((p) => p.filter((file, index) => index !== i));
   };
 
   useEffect(() => {
-    onChange(files);
+    setValue("files", f);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files]);
+  }, [f]);
 
   return (
     <>
       <Label htmlFor="file">Upload Test File</Label>
       <div className="flex flex-col items-center gap-2">
-        {!!files.length && (
+        {!!f?.length && (
           <div className="flex flex-col gap-2 min-h-9 rounded-md border border-input bg-transparent p-2 text-sm w-full">
-            {files?.map((file, i) => (
+            {f?.map((file, i) => (
               <div
                 key={i}
                 className="flex items-center justify-between p-2 gap-1 rounded-md text-sm font-medium border border-input bg-background shadow-sm"
@@ -69,12 +79,12 @@ const FileUpload = ({ onChange }) => {
         )}
         <Button size="icon" variant="outline" className="relative w-full">
           <Input
-            id="file"
             multiple
-            className="absolute inset-0 opacity-0"
+            onChange={handleChange}
+            className={`absolute inset-0 opacity-0`}
             placeholder="Choose a file"
             type="file"
-            onChange={handleChange}
+            size="lg"
           />
           <UploadIcon className="h-4 w-4" />
         </Button>
@@ -85,47 +95,15 @@ const FileUpload = ({ onChange }) => {
 
 const AddTest = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue, formState, setError, clearErrors } =
-    useForm();
-  const { data, isLoading } = useStandards();
+  const form = useForm();
+  const { data: standards, isLoading: standardLoading } = useStandards();
   const { data: subjects, isLoading: subjectLoading } = useSubjects();
   const addTest = useAddTest();
-  const [calendarValue, setCalendarValue] = useState();
 
-  const handleAddStudent = (details) => {
-    if (!details.standard) {
-      setError("standard", {
-        type: "custom",
-        required: true,
-      });
-      return;
-    }
-    if (!details.subject) {
-      setError("subject", {
-        type: "custom",
-        required: true,
-      });
-      return;
-    }
-    if (!details.on) {
-      setError("on", {
-        type: "custom",
-        required: true,
-      });
-      return;
-    }
-    if (!details.description) {
-      setError("formError", {
-        type: "custom",
-        required: true,
-        message: "Description is Mandatory.",
-      });
-      return;
-    }
-
+  const handleAddTest = (details) => {
     addTest.mutate(details, {
       onError: (e) =>
-        setError("formError", {
+        form.setError("formError", {
           type: "custom",
           message: e.response.data.message,
         }),
@@ -137,7 +115,7 @@ const AddTest = () => {
 
   return (
     <>
-      <div className="w-full max-h-full overflow-scroll max-w-lg rounded-lg">
+      <div className="w-full max-h-full overflow-scroll max-w-lg rounded-lg px-1">
         <div className="mx-auto max-w-md ">
           <div className="space-y-2 text-center">
             <h1 className="text-xl font-bold">Create Test</h1>
@@ -145,158 +123,252 @@ const AddTest = () => {
               Enter the Test details to add them to the database.
             </p>
           </div>
-          <form
-            className="space-y-6"
-            onSubmit={(e) => {
-              clearErrors();
-              handleSubmit((d) => {
-                console.log(d);
-                handleAddStudent(d);
-              })(e);
-            }}
-          >
-            <div className="space-y-1">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                {...register("name", { required: true })}
-                id="name"
-                placeholder="Unit/SA/Final/Weekly"
-                className={`${
-                  formState.errors["name"] ? "border-red-600 text-red-600" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="phone">Description</Label>
-              <React.Suspense fallback={<Loading />}>
-                <MDX setValue={setValue} />
-              </React.Suspense>
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="standard">Standard</Label>
-              {isLoading ? (
-                <p className="flex justify-center">
-                  <Loading size={4} />
-                </p>
-              ) : (
-                <Select
-                  id="standard"
-                  {...register("standard", { required: true })}
-                  onValueChange={(e) => setValue("standard", e)}
-                >
-                  <SelectTrigger
-                    className={`${
-                      formState.errors["standard"] ? "border-red-600" : ""
-                    }`}
-                  >
-                    <SelectValue placeholder="Select Standard" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {data.data.standards.map((std) => (
-                      <SelectItem key={std._id} value={std._id}>
-                        {std.class}
-                        {std.field === "NONE" ? "" : ` - ${std.field}`}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+          <Form {...form}>
+            <form
+              className="space-y-6"
+              onSubmit={(e) => {
+                form.clearErrors();
+                form.handleSubmit((d) => {
+                  console.log(d);
+                  handleAddTest(d);
+                })(e);
+              }}
+            >
+              <div className="space-y-1">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  rules={{ required: true }}
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Unit/SA/Final/Weekly"
+                            size="lg"
+                            type="text"
+                            className={`${
+                              form.formState?.errors?.["name"]
+                                ? "border-red-600 text-red-600"
+                                : ""
+                            }`}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+              <div className="space-y-1">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  rules={{ required: true }}
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <React.Suspense fallback={<Loading />}>
+                            <MDX
+                              markdown={field.value}
+                              setValue={form.setValue}
+                            />
+                          </React.Suspense>
+                        </FormControl>
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+              <div className="space-y-1">
+                <FormField
+                  control={form.control}
+                  rules={{ required: true }}
+                  name="standard"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Standard</FormLabel>
+                        {standardLoading ? (
+                          <Loading />
+                        ) : (
+                          <FormControl>
+                            <Select
+                              id="standard"
+                              onValueChange={field.onChange}
+                            >
+                              <SelectTrigger
+                                size="lg"
+                                className={`${
+                                  form.formState?.errors?.["standard"]
+                                    ? "border-red-600 text-red-600"
+                                    : ""
+                                }`}
+                              >
+                                <SelectValue placeholder="Select Standard" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {standards.data.standards.map((std) => (
+                                  <SelectItem key={std._id} value={std._id}>
+                                    {std.class}
+                                    {std.field === "NONE"
+                                      ? ""
+                                      : ` - ${std.field}`}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                        )}
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+              <div className="space-y-1">
+                <FormField
+                  control={form.control}
+                  rules={{ required: true }}
+                  name="subject"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Standard</FormLabel>
+                        {subjectLoading ? (
+                          <Loading />
+                        ) : (
+                          <FormControl>
+                            <Select id="subject" onValueChange={field.onChange}>
+                              <SelectTrigger
+                                size="lg"
+                                className={`${
+                                  form.formState?.errors?.["subject"]
+                                    ? "border-red-600 text-red-600"
+                                    : ""
+                                }`}
+                              >
+                                <SelectValue placeholder="Select Subject" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {subjects.data.subjects.map((sub) => (
+                                  <SelectItem key={sub._id} value={sub._id}>
+                                    {sub?.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                        )}
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <FormField
+                  control={form.control}
+                  rules={{ required: true }}
+                  name="on"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Date of Test</FormLabel>
+                        <FormControl>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant={"outline"}
+                                size="lg"
+                                {...field}
+                                className={`${
+                                  form.formState?.errors?.["on"]
+                                    ? "border-red-600 text-red-600"
+                                    : ""
+                                }${cn("pl-3 text-left font-normal w-full")}`}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={(e) => {
+                                  field.onChange(e);
+                                }}
+                                disabled={(date) =>
+                                  date < new Date().setHours(0, 0, 0, 0)
+                                }
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </FormControl>
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <FormField
+                  control={form.control}
+                  name="files"
+                  render={() => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <FileUpload setValue={form.setValue} />
+                        </FormControl>
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+
+              {form.formState?.errors?.["formError"] && (
+                <FormMessage className="text-[0.8rem] text-red-600 text-center">
+                  {form.formState.errors["formError"].message}
+                </FormMessage>
               )}
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="standard">Subject</Label>
-              {subjectLoading ? (
-                <p className="flex justify-center">
-                  <Loading size={4} />
-                </p>
-              ) : (
-                <Select
-                  id="subject"
-                  {...register("subject", { required: true })}
-                  onValueChange={(e) => setValue("subject", e)}
+
+              <div className="space-y-3">
+                <Button
+                  disabled={addTest.isPending}
+                  className="w-full"
+                  type="submit"
+                  size="lg"
                 >
-                  <SelectTrigger
-                    className={`${
-                      formState.errors["subject"] ? "border-red-600" : ""
-                    }`}
-                  >
-                    <SelectValue placeholder="Select Subject" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {subjects.data.subjects.map((sub) => (
-                      <SelectItem key={sub._id} value={sub._id}>
-                        {sub?.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="standard">Date of Test</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    {...register("on", { required: true })}
-                    className={`${
-                      formState.errors["on"]
-                        ? "border-red-600 text-red-600"
-                        : ""
-                    }${cn("pl-3 text-left font-normal w-full")}`}
-                  >
-                    {calendarValue ? (
-                      format(calendarValue, "PPP")
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={calendarValue}
-                    onSelect={(e) => {
-                      setCalendarValue(e);
-                      setValue("on", e);
-                    }}
-                    disabled={(date) => date < new Date().setHours(0, 0, 0, 0)}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="space-y-1">
-              <FileUpload onChange={(e) => setValue("file", e)} />
-            </div>
-
-            {formState.errors["formError"] && (
-              <p className="text-[0.8rem] text-red-600 text-center">
-                {formState.errors["formError"].message}
-              </p>
-            )}
-
-            <div className="space-y-3">
-              <Button
-                disabled={addTest.isPending}
-                className="w-full"
-                type="submit"
-              >
-                {addTest.isPending ? <Loading /> : "Create Test"}
-              </Button>
-              <Link
-                to="/dashboard"
-                style={{
-                  pointerEvents: addTest.isPending ? "none" : "auto",
-                }}
-                className={`${buttonVariants({ variant: "outline" })} w-full`}
-              >
-                Cancel
-              </Link>
-            </div>
-          </form>
+                  {addTest.isPending ? <Loading /> : "Create Test"}
+                </Button>
+                <Link
+                  to="/dashboard"
+                  style={{
+                    pointerEvents: addTest.isPending ? "none" : "auto",
+                  }}
+                  className={`${buttonVariants({
+                    variant: "outline",
+                    size: "lg",
+                  })} w-full`}
+                >
+                  Cancel
+                </Link>
+              </div>
+            </form>
+          </Form>
+          <DevTool control={form.control} />
         </div>
       </div>
     </>

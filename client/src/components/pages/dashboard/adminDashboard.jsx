@@ -34,7 +34,7 @@ const AdminDashboard = () => {
             <CardFooter>
               <Link
                 to="/student/new"
-                className={buttonVariants({ variabt: "default:" })}
+                className={buttonVariants({ variabt: "default" })}
               >
                 Add New Student
               </Link>
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
             <CardFooter>
               <Link
                 to="/teacher/new"
-                className={buttonVariants({ variabt: "default:" })}
+                className={buttonVariants({ variabt: "default" })}
               >
                 Add New Teacher
               </Link>
@@ -81,7 +81,7 @@ const AdminDashboard = () => {
             <CardFooter>
               <Link
                 to="/test/new"
-                className={buttonVariants({ variabt: "default:" })}
+                className={buttonVariants({ variabt: "default" })}
               >
                 Add New Test
               </Link>

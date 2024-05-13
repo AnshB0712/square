@@ -195,7 +195,6 @@ const T = ({ testId, data, form, columns }) => {
               disable={updateMarksheet.isPending}
               className="w-full"
               type="submit"
-              size="lg"
             >
               {updateMarksheet.isPending ? <Loading /> : "Update Marksheet"}
             </Button>
