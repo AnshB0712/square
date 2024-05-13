@@ -25,7 +25,6 @@ import { format } from "date-fns";
 import { cn } from "../../../lib/utils";
 import useAddTest from "../../../hooks/mutation/useAddTest";
 import { buttonVariants } from "../../ui/button";
-import { DevTool } from "@hookform/devtools";
 
 import {
   Form,
@@ -368,7 +367,6 @@ const AddTest = () => {
               </div>
             </form>
           </Form>
-          <DevTool control={form.control} />
         </div>
       </div>
     </>
