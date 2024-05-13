@@ -11,7 +11,7 @@ const refreshSession = async () => {
 };
 
 export const PersistUser = () => {
-  const { setUser } = useAuthCtx();
+  const { setUser, user } = useAuthCtx();
   const { data, isError, isLoading } = useQuery({
     queryKey: ["refresh-session"],
     queryFn: refreshSession,
@@ -25,7 +25,7 @@ export const PersistUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  if (isLoading) return <SplashScreen />;
+  if (isLoading || !user.token) return <SplashScreen />;
 
   if (isError) {
     return <Navigate to={"/"} />;
