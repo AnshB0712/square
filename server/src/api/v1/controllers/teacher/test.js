@@ -110,25 +110,6 @@ const getSingleTest = async (req, res) => {
   if (!t)
     throw new APIError(StatusCodes.NOT_FOUND, "No test found with this id.");
 
-  if (user.role.includes("ADMIN")) {
-    // IF USER IS ADMIN NO NEED TO CHECK BELOW CONDITIONS
-    return res.status(200).json({
-      success: true,
-      data: t,
-      message: "Test Found.",
-    });
-  }
-
-  const sameTestOwner =
-    user._id.toString() === t.createdBy.toString() ||
-    user._id.toString() === t.assignedTo.toString();
-
-  if (!sameTestOwner)
-    throw new APIError(
-      StatusCodes.BAD_REQUEST,
-      "This test is not created by you. You can only access test created by you only."
-    );
-
   res.status(200).json({
     success: true,
     data: t,
