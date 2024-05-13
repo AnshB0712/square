@@ -3,6 +3,7 @@ import { customAxios } from "../../api/axios.js";
 import { SplashScreen } from "./splashScreen.jsx";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthCtx } from "../../context/authContext.jsx";
+import { useEffect } from "react";
 
 const refreshSession = async () => {
   const { data } = await customAxios("/auth/refresh-session");
@@ -11,12 +12,18 @@ const refreshSession = async () => {
 
 export const PersistUser = () => {
   const { setUser } = useAuthCtx();
-  const { isError, isLoading } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: ["refresh-session"],
     queryFn: refreshSession,
     staleTime: Infinity,
-    onSuccess: (e) => setUser(e.data),
   });
+
+  useEffect(() => {
+    if (data) {
+      setUser(data.data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   if (isLoading) return <SplashScreen />;
 

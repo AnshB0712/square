@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/layout/layout.jsx";
 import { PersistUser } from "./components/layout/persistUser.jsx";
-import { LoginForm } from "./components/ui/loginForm";
+import { LoginForm } from "./components/pages/dashboard/loginForm.jsx";
 import Dashboard from "./components/pages/dashboard/index.jsx";
 import AddStudent from "./components/pages/dashboard/addStudent.jsx";
 import AddTeacher from "./components/pages/dashboard/addTeacher.jsx";
@@ -10,6 +10,7 @@ import EditTest from "./components/pages/dashboard/editTest.jsx";
 import FullTestTable from "./components/pages/dashboard/FullTestTable.jsx";
 import Marksheet from "./components/pages/dashboard/marksheet.jsx";
 import EditMarksheet from "./components/pages/dashboard/editMarksheet.jsx";
+import RBARoute from "./components/layout/RBARoute.jsx";
 
 const App = () => {
   return (
@@ -19,13 +20,62 @@ const App = () => {
           <Route path="/" element={<LoginForm />} />
           <Route element={<PersistUser />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/student/new" element={<AddStudent />} />
-            <Route path="/teacher/new" element={<AddTeacher />} />
-            <Route path="/test/new" element={<AddTest />} />
-            <Route path="/test/:testId" element={<EditTest />} />
-            <Route path="/marksheet/new/:testId" element={<Marksheet />} />
-            <Route path="/marksheet/test/:testId" element={<EditMarksheet />} />
-            <Route path="/test-table" element={<FullTestTable />} />
+            <Route
+              path="/student/new"
+              element={
+                <RBARoute roles={["ADMIN"]}>
+                  <AddStudent />
+                </RBARoute>
+              }
+            />
+            <Route
+              path="/teacher/new"
+              element={
+                <RBARoute roles={["ADMIN"]}>
+                  <AddTeacher />
+                </RBARoute>
+              }
+            />
+            <Route
+              path="/test/new"
+              element={
+                <RBARoute roles={["ADMIN", "TEACHER"]}>
+                  <AddTest />
+                </RBARoute>
+              }
+            />
+            <Route
+              path="/test/:testId"
+              element={
+                <RBARoute roles={["ADMIN", "TEACHER"]}>
+                  <EditTest />
+                </RBARoute>
+              }
+            />
+            <Route
+              path="/marksheet/new/:testId"
+              element={
+                <RBARoute roles={["ADMIN", "TEACHER"]}>
+                  <Marksheet />
+                </RBARoute>
+              }
+            />
+            <Route
+              path="/marksheet/test/:testId"
+              element={
+                <RBARoute roles={["ADMIN", "TEACHER"]}>
+                  <EditMarksheet />
+                </RBARoute>
+              }
+            />
+            <Route
+              path="/test-table"
+              element={
+                <RBARoute roles={["ADMIN", "TEACHER"]}>
+                  <FullTestTable />
+                </RBARoute>
+              }
+            />
           </Route>
         </Route>
       </Routes>
