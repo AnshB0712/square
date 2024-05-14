@@ -1,5 +1,6 @@
 import { useAuthCtx } from "../../../context/authContext";
 import AdminDashboard from "./adminDashboard";
+import StudentDashboard from "./studentDashboard";
 import TeacherDashboard from "./teacherDashboard";
 
 const Dashboard = () => {
@@ -12,6 +13,9 @@ const Dashboard = () => {
       break;
     case "TEACHER":
       content = <TeacherDashboard />;
+      break;
+    case "STUDENT":
+      content = <StudentDashboard />;
       break;
     default:
       content = <p>No Role Assigned</p>;

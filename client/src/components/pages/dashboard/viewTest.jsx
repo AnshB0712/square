@@ -1,6 +1,6 @@
 import React from "react";
 import useGetTest from "../../../hooks/query/useGetTest";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Loading } from "../../layout/loading";
 import { SelectValue, SelectTrigger, Select } from "@/components/ui/select";
@@ -18,7 +18,11 @@ const MDX = React.lazy(() => import("./mdx"));
 
 const ViewTest = () => {
   const { testId } = useParams();
-  const { data, isLoading } = useGetTest({ testId });
+  const [searchParams] = useSearchParams();
+  const { data, isLoading } = useGetTest({
+    testId,
+    isStudent: searchParams.get("role") ?? false,
+  });
 
   if (isLoading) return <Loading />;
 
