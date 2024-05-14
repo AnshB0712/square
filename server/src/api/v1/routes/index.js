@@ -6,6 +6,7 @@ const { teacherRouter } = require("./teacher");
 const { verifyJWT } = require("../middlewares/verifyJWT");
 const { verifyRole } = require("../middlewares/verifyRole");
 const { utilsRouter } = require("./utils");
+const { studentRouter } = require("./student");
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.use(
   verifyRole(["ADMIN", "TEACHER"]),
   teacherRouter
 );
+router.use("/student", verifyJWT, verifyRole(["STUDENT"]), studentRouter);
 router.use("/utils", utilsRouter);
-// router.use("/teacher", teacherRouter);
 
 module.exports = { router };

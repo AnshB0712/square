@@ -77,7 +77,7 @@ const AvatarDropdown = () => {
             size="sm"
             style={{ borderColor: "#7549C4", color: "#7549C4" }}
           >
-            {user.role[0]}
+            {user?.role?.[0]}
           </Badge>
         </div>
         <DropdownMenuSeparator />

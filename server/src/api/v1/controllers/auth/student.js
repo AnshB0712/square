@@ -3,11 +3,12 @@ const { APIError } = require("../../utils/apiError.js");
 const { JWT_KEY } = require("../../../../../config");
 const jwt = require("jsonwebtoken");
 const { createToken } = require("../../utils/createTokens.js");
+const { StatusCodes } = require("http-status-codes");
 
 const loginStudent = async (req, res) => {
   const { roll } = req.body;
 
-  const user = await User.findOne({ roll });
+  const user = await User.findOne({ roll }).lean();
 
   if (!user)
     throw new APIError(
@@ -15,7 +16,7 @@ const loginStudent = async (req, res) => {
       "You are not registered with us."
     );
 
-  const { accessToken, refreshToken } = createToken(user);
+  const { accessToken, refreshToken } = createToken({ ...user });
 
   res.cookie("refresh", refreshToken, {
     httpOnly: true,

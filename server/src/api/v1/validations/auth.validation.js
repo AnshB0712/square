@@ -13,7 +13,7 @@ const validateLoginAdmin = {
 const validateLoginStudent = {
   body: Joi.object()
     .keys({
-      roll: Joi.number().required(),
+      roll: Joi.string().required(),
     })
     .required(),
 };

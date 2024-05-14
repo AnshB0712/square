@@ -121,7 +121,10 @@ const getTests = async (req, res) => {
   const academicYear = req.academicYear;
   let t;
 
-  t = await Test.find({ academicYear })
+  t = await Test.find({
+    academicYear,
+    on: { $gte: new Date().setHours(0, 0, 0, 0) },
+  })
     .populate("standard")
     .populate("subject")
     .populate("assignedTo", ["name", "role", "_id"])
