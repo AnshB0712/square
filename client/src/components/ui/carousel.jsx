@@ -204,8 +204,8 @@ const CarouselDots = React.forwardRef(({ className, ...props }, ref) => {
         return (
           <div
             key={i}
-            className={`h-1 w-1 rounded-full bg-gray-400 transition-transform duration-500 ease ${
-              i === selectedIndex ? "transform scale-120" : ""
+            className={`h-1 w-1 rounded-full transition-transform duration-500 ease ${
+              i === selectedIndex ? "bg-gray-400" : "bg-gray-600"
             }`}
           />
         );
