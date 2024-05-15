@@ -51,7 +51,7 @@ const StudentDashboard = () => {
             <CircleHelp className="h-4 w-4 text-muted-foreground" />
           </Button>
         </div>
-        <div className="w-full space-y-4">
+        <div className="w-full my-6">
           <Sparkles>
             <Button
               onClick={() =>

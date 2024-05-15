@@ -5,9 +5,23 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
+import { Loading } from "../../layout/loading";
 import { BarChart4 } from "lucide-react";
+import MarksChart from "./marksChart";
+import useGetEnrolledSubjects from "../../../hooks/query/useGetEnrolledSubjects";
+import { useEffect, useState } from "react";
 
 const StudentPerformanceGraph = () => {
+  const { data: enrolledSubjects, isLoading: enrolledSubjectsLoading } =
+    useGetEnrolledSubjects();
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    if (enrolledSubjects) {
+      setValue(enrolledSubjects.data.data[0]._id);
+    }
+  }, [enrolledSubjects]);
+
   return (
     <>
       <article className=" flex flex-col gap-2">
@@ -16,22 +30,26 @@ const StudentPerformanceGraph = () => {
           <h1 className="text-sm mb-[2px] font-medium flex items-center md:text-2xl">
             Performance Graph
           </h1>
-          <Select onValueChange={(e) => console.log(e)}>
+          <Select value={value} onValueChange={(e) => setValue(e)}>
             <SelectTrigger className="w-18  ml-auto">
               <SelectValue placeholder="Subjects" />
             </SelectTrigger>
             <SelectContent>
-              {[0, 1, 2].map((n) => (
-                <SelectItem key={n} value={n}>
-                  {n}
-                </SelectItem>
-              ))}
+              {enrolledSubjectsLoading ? (
+                <Loading />
+              ) : (
+                enrolledSubjects.data.data.map((subject) => (
+                  <SelectItem key={subject._id} value={subject._id}>
+                    {subject.name}
+                  </SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
         </div>
 
         <div className="w-full">
-          <p>Performance based Graph</p>
+          <MarksChart value={value} />
         </div>
       </article>
     </>
