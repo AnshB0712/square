@@ -5,8 +5,11 @@ const getUpcomingTests = async (req, res) => {
   const academicYear = req.academicYear;
   let t;
 
+  const student = await User.findById(req.user._id).lean();
+
   t = await Test.find({
     academicYear,
+    standard: student.standard,
     on: { $gte: new Date().setHours(0, 0, 0, 0) },
   })
     .populate("standard")
