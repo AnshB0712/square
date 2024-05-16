@@ -54,7 +54,7 @@ const FormFieldRender = ({ role, form }) => {
                         name="uniqueField"
                         type="text"
                         className={`${
-                          form?.errors?.["uniqueField"]
+                          form?.formState?.errors?.["uniqueField"]
                             ? "border-red-600 text-red-600"
                             : ""
                         }`}
@@ -80,7 +80,7 @@ const FormFieldRender = ({ role, form }) => {
                         size="lg"
                         type="password"
                         className={`${
-                          form?.errors?.["password"]
+                          form?.formState?.errors?.["password"]
                             ? "border-red-600 text-red-600"
                             : ""
                         }`}
@@ -112,7 +112,7 @@ const FormFieldRender = ({ role, form }) => {
                         size="lg"
                         type="text"
                         className={`${
-                          form?.errors?.["phone"]
+                          form?.formState?.errors?.["phone"]
                             ? "border-red-600 text-red-600"
                             : ""
                         }`}
@@ -138,7 +138,7 @@ const FormFieldRender = ({ role, form }) => {
                         size="lg"
                         type="password"
                         className={`${
-                          form?.errors?.["password"]
+                          form?.formState?.errors?.["password"]
                             ? "border-red-600 text-red-600"
                             : ""
                         }`}
@@ -170,7 +170,7 @@ const FormFieldRender = ({ role, form }) => {
                         size="lg"
                         type="number"
                         className={`${
-                          form?.errors?.["roll"]
+                          form?.formState?.errors?.["roll"]
                             ? "border-red-600 text-red-600"
                             : ""
                         }`}

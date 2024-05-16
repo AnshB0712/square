@@ -5,10 +5,10 @@ import { Loading } from "../../layout/loading";
 const isLatestMarksLessThenHighest = (data) => {
   if (!data || !Array.isArray(data)) return true;
 
-  const MAX_PERCENTAGE = Math.max(data.map((val) => val.percentage));
+  const MAX_PERCENTAGE = Math.max(...data.map((val) => val.percentage));
   const latestPercentage = data[data.length - 1]["percentage"];
 
-  return MAX_PERCENTAGE < latestPercentage;
+  return MAX_PERCENTAGE > latestPercentage;
 };
 
 const tooltip = (props) => {
@@ -28,7 +28,7 @@ const tooltip = (props) => {
                 {`${new Intl.DateTimeFormat("en-GB", {
                   dateStyle: "full",
                   timeZone: "Asia/Kolkata",
-                }).format(Date.now(category.payload.on))}`}
+                }).format(new Date(category.payload.on))}`}
               </p>
             </div>
             <div className="space-y-.5">

@@ -195,7 +195,7 @@ const CarouselDots = React.forwardRef(({ className, ...props }, ref) => {
     <div
       ref={ref}
       className={cn(
-        "flex justify-center items-center gap-1 absolute left-1/2 top-100% transform -translate-x-1/2 translate-y-2.5 h-3 w-full max-w-[35px] overflow-scroll bg-muted rounded-3xl",
+        "flex justify-between gap-[3px] items-center absolute left-1/2 top-100% transform -translate-x-1/2 translate-y-2.5 px-1 py-0.5 max-w-[50px] overflow-hidden bg-muted rounded-3xl",
         className
       )}
       {...props}
@@ -204,8 +204,10 @@ const CarouselDots = React.forwardRef(({ className, ...props }, ref) => {
         return (
           <div
             key={i}
-            className={`h-1 w-1 rounded-full transition-transform duration-500 ease ${
-              i === selectedIndex ? "bg-gray-400" : "bg-gray-600"
+            className={`h-1 w-1 aspect-square rounded-full transition-transform duration-500 ease ${
+              i === selectedIndex
+                ? "bg-gray-400 transform scale-150"
+                : "bg-gray-600"
             }`}
           />
         );
