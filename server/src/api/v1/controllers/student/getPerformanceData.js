@@ -48,7 +48,9 @@ const getPerformanceData = async (req, res) => {
     // Project to get necessary fields
     {
       $project: {
-        on: 1, // date of the test
+        on: 1, // date of the test,
+        marks: `$marksheet.sheet.${studentId}.marks`,
+        total: "$marksheet.fullMarksOfTest",
         percentage: {
           $cond: {
             if: {

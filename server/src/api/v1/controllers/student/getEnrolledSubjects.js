@@ -34,8 +34,24 @@ const getEnrolledSubjects = async (req, res) => {
       },
     },
     {
+      $unwind: {
+        path: "$subject",
+      },
+    },
+    {
       $replaceRoot: {
-        newRoot: { $arrayElemAt: ["$subject", 0] },
+        newRoot: "$subject",
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        name: {
+          $first: "$name",
+        },
+        count: {
+          $sum: 1,
+        },
       },
     },
   ];
