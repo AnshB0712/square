@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const { Test } = require("../../models/test");
+const { User } = require("../../models/user");
 
 const getUpcomingTests = async (req, res) => {
   const academicYear = req.academicYear;
