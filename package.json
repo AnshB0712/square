@@ -2,8 +2,5 @@
   "scripts": {
     "s": "cd server && npm run dev",
     "c": "cd client && npm run dev"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.35.5"
   }
 }

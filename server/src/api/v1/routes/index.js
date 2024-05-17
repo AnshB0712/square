@@ -20,6 +20,6 @@ router.use(
   teacherRouter
 );
 router.use("/student", verifyJWT, verifyRole(["STUDENT"]), studentRouter);
-router.use("/utils", utilsRouter);
+router.use("/utils", verifyJWT, utilsRouter);
 
 module.exports = { router };

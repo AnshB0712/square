@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { customAxios } from "../../api/axios";
+import usePrivateAxios from "../usePrivateAxios";
 
-const getSubjects = async () => {
-  const res = await customAxios.get("/utils/subjects");
+const getSubjects = async (axios) => {
+  const res = await axios.get("/utils/subjects");
   return res;
 };
 
 const useSubjects = () => {
+  const axios = usePrivateAxios();
   const q = useQuery({
     queryKey: ["subjects"],
-    queryFn: getSubjects,
+    queryFn: () => getSubjects(axios),
     staleTime: Infinity,
   });
 

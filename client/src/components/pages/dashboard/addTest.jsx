@@ -253,7 +253,11 @@ const AddTest = () => {
                               </SelectTrigger>
                               <SelectContent>
                                 {subjects.data.subjects.map((sub) => (
-                                  <SelectItem key={sub._id} value={sub._id}>
+                                  <SelectItem
+                                    key={sub._id}
+                                    value={sub._id}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
                                     {sub?.name}
                                   </SelectItem>
                                 ))}

@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { Test } = require("../../models/test");
 const { User } = require("../../models/user");
+const dayjs = require("dayjs");
 
 const getUpcomingTests = async (req, res) => {
   const academicYear = req.academicYear;
@@ -11,7 +12,7 @@ const getUpcomingTests = async (req, res) => {
   t = await Test.find({
     academicYear,
     standard: student.standard,
-    on: { $gte: new Date().setHours(0, 0, 0, 0) },
+    on: { $gte: dayjs().toDate() },
   })
     .populate("standard")
     .populate("subject")

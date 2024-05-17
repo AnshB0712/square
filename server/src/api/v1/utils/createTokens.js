@@ -9,6 +9,7 @@ createToken = (payload) => {
   const accessToken = jwt.sign(payload, JWT_KEY, {
     expiresIn: JWT_ACCESS_EXP,
   });
+
   const refreshToken = jwt.sign(payload, JWT_KEY, {
     expiresIn: JWT_REFRESH_EXP,
   });

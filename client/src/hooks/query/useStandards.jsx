@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { customAxios } from "../../api/axios";
+import usePrivateAxios from "../usePrivateAxios";
 
-const getStandards = async () => {
-  const res = await customAxios.get("/utils/standards");
+const getStandards = async (axios) => {
+  const res = await axios.get("/utils/standards");
   return res;
 };
 
 const useStandards = () => {
+  const axios = usePrivateAxios();
   const q = useQuery({
     queryKey: ["standards"],
-    queryFn: getStandards,
+    queryFn: () => getStandards(axios),
     staleTime: Infinity,
   });
 
