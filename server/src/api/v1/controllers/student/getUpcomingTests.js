@@ -9,10 +9,13 @@ const getUpcomingTests = async (req, res) => {
 
   const student = await User.findById(req.user._id).lean();
 
+  const startOfToday = dayjs().startOf("day").toDate();
+  const startOfTomorrow = dayjs().add(1, "day").startOf("day").toDate();
+
   t = await Test.find({
     academicYear,
     standard: student.standard,
-    on: { $gte: new Date().setHours(23, 59, 59, 0) },
+    on: { $gte: startOfToday, $lt: startOfTomorrow },
   })
     .populate("standard")
     .populate("subject")

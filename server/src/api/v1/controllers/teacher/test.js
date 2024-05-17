@@ -2,6 +2,7 @@ const { Test } = require("../../models/test.js");
 const { StatusCodes } = require("http-status-codes");
 const { uploadMultiMedia } = require("../../services/cloudinary.js");
 const { APIError } = require("../../utils/apiError.js");
+const dayjs = require("dayjs");
 
 const createTest = async (req, res) => {
   const user = req.user;
@@ -55,6 +56,13 @@ const updateTest = async (req, res) => {
       "cannot edit test as it is not created by you."
     );
 
+  if (dayjs(dayjs().toDate()).isAfter(t.on)) {
+    throw new APIError(
+      StatusCodes.BAD_REQUEST,
+      "cannot edit test after its already held."
+    );
+  }
+
   const u = await Test.findByIdAndUpdate(
     testId,
     {
@@ -83,7 +91,7 @@ const deleteTest = async (req, res) => {
 
   if (!isTestOwnerSame || !isUserAdmin)
     throw new APIError(
-      StatusCodes.BAD_REQUEST,
+      StatusCodes.FORBIDDEN,
       "cannot delete test as it is not created by you."
     );
 
@@ -121,9 +129,12 @@ const getTests = async (req, res) => {
   const academicYear = req.academicYear;
   let t;
 
+  const startOfToday = dayjs().startOf("day").toDate();
+  const startOfTomorrow = dayjs().add(1, "day").startOf("day").toDate();
+
   t = await Test.find({
     academicYear,
-    on: { $gte: new Date().setHours(0, 0, 0, 0) },
+    on: { $gte: startOfToday, $lt: startOfTomorrow },
   })
     .populate("standard")
     .populate("subject")
@@ -133,7 +144,7 @@ const getTests = async (req, res) => {
     .lean();
 
   // Adding Boolean for Frontend to know on what test a Logged-In user can EDIT-TEST/MAKE-MARKSHEET-OF-TEST/EDIT-MARKSHEET
-  if (t?.length) {
+  if (t.length) {
     t = t.map((test) => {
       let canTakeAction = false;
 
@@ -149,7 +160,7 @@ const getTests = async (req, res) => {
     });
   }
 
-  res.status(200).json({
+  res.status(StatusCodes.OK).json({
     success: true,
     data: t,
     message: "Test Found.",

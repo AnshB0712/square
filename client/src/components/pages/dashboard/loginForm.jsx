@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Loading } from "../../layout/loading.jsx";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useLogin } from "../../../hooks/mutation/useLogin.jsx";
 
 import {
@@ -198,6 +198,8 @@ export function LoginForm() {
   const [role, setRole] = useState("");
   const form = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/dashboard";
   const login = useLogin(`auth/login/${role}`);
 
   const handleLogin = async (details) => {
@@ -211,7 +213,7 @@ export function LoginForm() {
             type: "custom",
             message: e.response.data.message,
           }),
-        onSuccess: () => navigate("/dashboard"),
+        onSuccess: () => navigate(from),
       }
     );
   };

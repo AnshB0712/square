@@ -12,7 +12,7 @@ const assignClassSubject = async (req, res) => {
   }).lean();
 
   if (!teacher)
-    throw new APIError(StatusCodes.BAD_REQUEST, "No teacher with ID exists.");
+    throw new APIError(StatusCodes.NOT_FOUND, "No teacher with ID exists.");
 
   const t = await User.findByIdAndUpdate(
     teacherId,

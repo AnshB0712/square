@@ -8,12 +8,12 @@ const refresh = (req, res) => {
   const { refresh } = req.cookies;
 
   if (!refresh)
-    throw new APIError(StatusCodes.BAD_REQUEST, "You are not logged in.");
+    throw new APIError(StatusCodes.FORBIDDEN, "You are not logged in.");
 
   jwt.verify(refresh, JWT_KEY, (err, decoded) => {
     if (err) {
       res.clearCookie("refresh");
-      return res.status(StatusCodes.CONFLICT).json({
+      return res.status(428).json({
         success: false,
         message: "you're session expired please login again.",
       });
@@ -36,7 +36,7 @@ const logout = (req, res) => {
   const { refresh } = req.cookies;
 
   if (!refresh)
-    throw new APIError(StatusCodes.BAD_REQUEST, "You are not logged in.");
+    throw new APIError(StatusCodes.UNAUTHORIZED, "You are not logged in.");
 
   res.clearCookie("refresh");
 

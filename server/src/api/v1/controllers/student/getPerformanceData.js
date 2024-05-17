@@ -10,7 +10,7 @@ const getPerformanceData = async (req, res) => {
   const { subjectId } = req.params;
 
   const subject = await Subject.findById(subjectId);
-  if (!subject) throw new APIError(StatusCodes.BAD_REQUEST);
+  if (!subject) throw new APIError(StatusCodes.NOT_FOUND);
 
   const studentId = user._id;
   const student = await User.findById(studentId).lean();

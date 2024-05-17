@@ -73,14 +73,14 @@ const loginTeacher = async (req, res) => {
 
   if (!user)
     throw new APIError(
-      StatusCodes.BAD_REQUEST,
+      StatusCodes.NOT_FOUND,
       "You are not registered with us."
     );
 
   const isPasswordMatched = comparePassword(password, user.password);
 
   if (!isPasswordMatched)
-    throw new APIError(StatusCodes.BAD_REQUEST, "Password is incorrect.");
+    throw new APIError(StatusCodes.UNAUTHORIZED, "Password is incorrect.");
 
   const { accessToken, refreshToken } = createToken({
     _id: user._id,

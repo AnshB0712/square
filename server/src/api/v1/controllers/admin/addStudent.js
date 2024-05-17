@@ -4,8 +4,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const addStudent = async (req, res) => {
   const { name, role = ["STUDENT"], phone, fees, standard } = req.body;
-  const currentYear = new Date().getFullYear();
-  const academicYear = `${currentYear}-${currentYear + 1}`;
+  const academicYear = req.academicYear;
   const roll = genNumericId();
 
   const student = await User.create({
@@ -18,7 +17,7 @@ const addStudent = async (req, res) => {
     standard,
   });
 
-  res.status(StatusCodes.OK).json({
+  res.status(StatusCodes.CREATED).json({
     success: true,
     message: "Student created.",
     data: student,

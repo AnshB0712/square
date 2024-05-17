@@ -12,7 +12,7 @@ const loginStudent = async (req, res) => {
 
   if (!user)
     throw new APIError(
-      StatusCodes.BAD_REQUEST,
+      StatusCodes.NOT_FOUND,
       "You are not registered with us."
     );
 
