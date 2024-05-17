@@ -12,7 +12,7 @@ const getUpcomingTests = async (req, res) => {
   t = await Test.find({
     academicYear,
     standard: student.standard,
-    on: { $gte: dayjs().toDate() },
+    on: { $gte: new Date().setHours(23, 59, 59, 0) },
   })
     .populate("standard")
     .populate("subject")
