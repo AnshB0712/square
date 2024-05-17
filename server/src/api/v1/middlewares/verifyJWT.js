@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const { APIError } = require("../utils/apiError");
 const { JWT_KEY } = require("../../../../config");
+const dayjs = require("dayjs");
 
 const verifyJWT = (req, res, next) => {
   // Get token from request headers, query parameters, or cookies
@@ -23,7 +24,7 @@ const verifyJWT = (req, res, next) => {
       );
     }
 
-    const currentYear = new Date().getFullYear();
+    const currentYear = dayjs().year();
     const academicYear = `${currentYear}-${currentYear + 1}`;
 
     req.academicYear = academicYear;

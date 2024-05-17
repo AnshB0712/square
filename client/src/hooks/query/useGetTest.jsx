@@ -13,7 +13,6 @@ const useGetTest = ({ testId, isStudent }) => {
   const q = useQuery({
     queryKey: ["tests", testId],
     queryFn: () => getTest(axios, testId, isStudent),
-    staleTime: 10_000,
     enabled: !!testId,
   });
   return q;

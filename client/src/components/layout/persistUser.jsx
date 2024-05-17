@@ -25,11 +25,11 @@ export const PersistUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  if (isLoading || !user.token) return <SplashScreen />;
-
   if (isError) {
     return <Navigate to={"/"} />;
   }
+
+  if (isLoading || !user.token) return <SplashScreen />;
 
   return <Outlet />;
 };
