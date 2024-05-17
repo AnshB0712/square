@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
         <App />
-        <Toaster toastOptions={{duration: 2000}}/>
+        <Toaster />
       </AuthContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
