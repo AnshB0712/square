@@ -13,18 +13,21 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
 import { buttonVariants } from "../../ui/button";
+import Error from "../../layout/error";
 
 const MDX = React.lazy(() => import("./mdx"));
 
 const ViewTest = () => {
   const { testId } = useParams();
   const [searchParams] = useSearchParams();
-  const { data, isLoading } = useGetTest({
+  const { data, isLoading, isError } = useGetTest({
     testId,
     isStudent: searchParams.get("role") ?? false,
   });
 
   if (isLoading) return <Loading />;
+
+  if (isError) return <Error />;
 
   return (
     <div className="w-full max-w-lg rounded-lg">
@@ -36,7 +39,7 @@ const ViewTest = () => {
           <div className="space-y-1">
             <>
               <Label>Name</Label>
-              <Input size="lg" value={data.data.data.name} readonly={""} />
+              <Input size="lg" value={data.data.data.name} readOnly={""} />
             </>
           </div>
           <div className="space-y-1">

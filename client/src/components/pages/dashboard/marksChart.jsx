@@ -1,6 +1,7 @@
 import { AreaChart } from "@tremor/react";
 import useGetPerformanceData from "../../../hooks/query/useGetPerformanceData";
 import { Loading } from "../../layout/loading";
+import Error from "../../layout/error";
 
 const isLatestMarksLessThenHighest = (data) => {
   if (!data || !Array.isArray(data)) return true;
@@ -47,9 +48,13 @@ const tooltip = (props) => {
 };
 
 const MarksChart = ({ value }) => {
-  const { data, isLoading } = useGetPerformanceData({
+  const { data, isLoading, isError } = useGetPerformanceData({
     subjectId: value,
   });
+
+  if (isError) {
+    return <Error />;
+  }
 
   if (isLoading)
     return (

@@ -130,11 +130,10 @@ const getTests = async (req, res) => {
   let t;
 
   const startOfToday = dayjs().startOf("day").toDate();
-  const startOfTomorrow = dayjs().add(1, "day").startOf("day").toDate();
 
   t = await Test.find({
     academicYear,
-    on: { $gte: startOfToday, $lt: startOfTomorrow },
+    on: { $gte: startOfToday },
   })
     .populate("standard")
     .populate("subject")
