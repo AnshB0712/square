@@ -10,9 +10,7 @@ export default defineConfig({
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
       manifest: {
         name: "Square App",
-        short_name: "",
-        description: "",
-        theme_color: "#000000",
+        theme_color: "#FFFFFF",
         icons: [
           {
             src: "pwa-192x192.png",
