@@ -1,7 +1,7 @@
 import { AreaChart } from "@tremor/react";
 import useGetPerformanceData from "../../../hooks/query/useGetPerformanceData";
 import { Loading } from "../../layout/loading";
-import Error from "../../layout/error";
+import Error from "../../layout/pageNotFound";
 
 const isLatestMarksLessThenHighest = (data) => {
   if (!data || !Array.isArray(data)) return true;

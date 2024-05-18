@@ -13,21 +13,18 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
 import { buttonVariants } from "../../ui/button";
-import Error from "../../layout/error";
 
 const MDX = React.lazy(() => import("./mdx"));
 
 const ViewTest = () => {
   const { testId } = useParams();
   const [searchParams] = useSearchParams();
-  const { data, isLoading, isError } = useGetTest({
+  const { data, isLoading } = useGetTest({
     testId,
     isStudent: searchParams.get("role") ?? false,
   });
 
   if (isLoading) return <Loading />;
-
-  if (isError) return <Error />;
 
   return (
     <div className="w-full max-w-lg rounded-lg">

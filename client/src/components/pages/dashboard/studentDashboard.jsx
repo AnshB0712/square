@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Button } from "../../ui/button";
 import Sparkles from "../../layout/sparkle";
 import StudentPerformanceGraph from "./studentPerformanceGraph";
+import CustomErrorBoundary from "../../layout/errorBoundary";
 
 const StudentDashboard = () => {
   return (
@@ -20,12 +21,16 @@ const StudentDashboard = () => {
           </h1>
         </div>
         <div className="w-full">
-          <UpcomingTests />
+          <CustomErrorBoundary>
+            <UpcomingTests />
+          </CustomErrorBoundary>
         </div>
       </article>
       <br />
       <br />
-      <StudentPerformanceGraph />
+      <CustomErrorBoundary>
+        <StudentPerformanceGraph />
+      </CustomErrorBoundary>
       <br />
       <br />
       <article className=" flex flex-col gap-2">

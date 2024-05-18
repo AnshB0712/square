@@ -32,7 +32,7 @@ import useMarsksheetDetails from "../../../hooks/query/useMarsksheetDetails";
 import { Loading } from "../../layout/loading";
 import useAddMarksheet from "../../../hooks/mutation/useAddMarksheet";
 import { buttonVariants } from "../../ui/button";
-import Error from "../../layout/error";
+import Error from "../../layout/pageNotFound";
 
 const T = ({ testId, data, form, columns }) => {
   const [sorting, setSorting] = React.useState([]);

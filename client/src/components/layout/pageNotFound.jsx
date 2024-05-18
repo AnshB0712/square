@@ -22,28 +22,26 @@ function TriangleAlertIcon(props) {
   );
 }
 
-const Error = () => {
+const PageNotFound = () => {
   return (
     <>
       <div className="flex min-h-[80vh] flex-col items-center justify-center gap-6 px-4 py-12 dark:bg-gray-800">
         <div className="flex max-w-md flex-col items-center justify-center text-center">
           <TriangleAlertIcon className="h-12 w-12 text-red-500" />
           <h1 className="mt-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
-            Oops, something went wrong!
+            Oops, 404 Not Found!
           </h1>
           <p className="mt-4 text-gray-600 dark:text-gray-400">
             We are sorry, but an unexpected error has occurred. Please try again
             later.
           </p>
           <div className="mt-6 flex w-full max-w-xs flex-col gap-2 sm:flex-row">
-            <Link className={buttonVariants({ size: "lg" })} href="/dashboard">
-              Go to Homepage
-            </Link>
             <Link
-              className={buttonVariants({ size: "lg", variant: "outline" })}
-              href="#"
+              to="/dashboard"
+              className={buttonVariants({ size: "lg" })}
+              href="/dashboard"
             >
-              Contact Support
+              Go to Homepage
             </Link>
           </div>
         </div>
@@ -52,4 +50,4 @@ const Error = () => {
   );
 };
 
-export default Error;
+export default PageNotFound;

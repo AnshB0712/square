@@ -12,6 +12,8 @@ import Marksheet from "./components/pages/dashboard/marksheet.jsx";
 import EditMarksheet from "./components/pages/dashboard/editMarksheet.jsx";
 import RBARoute from "./components/layout/RBARoute.jsx";
 import ViewTest from "./components/pages/dashboard/viewTest.jsx";
+import PageNotFound from "./components/layout/pageNotFound.jsx";
+import CustomErrorBoundary from "./components/layout/errorBoundary.jsx";
 
 const App = () => {
   return (
@@ -19,13 +21,21 @@ const App = () => {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<LoginForm />} />
-          <Route element={<PersistUser />}>
+          <Route
+            element={
+              <>
+                <PersistUser />
+              </>
+            }
+          >
             <Route path="/dashboard" element={<Dashboard />} />
             <Route
               path="/student/new"
               element={
                 <RBARoute roles={["ADMIN"]}>
-                  <AddStudent />
+                  <CustomErrorBoundary>
+                    <AddStudent />
+                  </CustomErrorBoundary>
                 </RBARoute>
               }
             />
@@ -33,7 +43,9 @@ const App = () => {
               path="/teacher/new"
               element={
                 <RBARoute roles={["ADMIN"]}>
-                  <AddTeacher />
+                  <CustomErrorBoundary>
+                    <AddTeacher />
+                  </CustomErrorBoundary>
                 </RBARoute>
               }
             />
@@ -41,7 +53,9 @@ const App = () => {
               path="/test/new"
               element={
                 <RBARoute roles={["ADMIN", "TEACHER"]}>
-                  <AddTest />
+                  <CustomErrorBoundary>
+                    <AddTest />
+                  </CustomErrorBoundary>
                 </RBARoute>
               }
             />
@@ -49,7 +63,9 @@ const App = () => {
               path="/edit/test/:testId"
               element={
                 <RBARoute roles={["ADMIN", "TEACHER"]}>
-                  <EditTest />
+                  <CustomErrorBoundary>
+                    <EditTest />
+                  </CustomErrorBoundary>
                 </RBARoute>
               }
             />
@@ -57,7 +73,9 @@ const App = () => {
               path="/view/test/:testId"
               element={
                 <RBARoute roles={["ADMIN", "TEACHER", "STUDENT"]}>
-                  <ViewTest />
+                  <CustomErrorBoundary>
+                    <ViewTest />
+                  </CustomErrorBoundary>
                 </RBARoute>
               }
             />
@@ -65,7 +83,9 @@ const App = () => {
               path="/marksheet/new/:testId"
               element={
                 <RBARoute roles={["ADMIN", "TEACHER"]}>
-                  <Marksheet />
+                  <CustomErrorBoundary>
+                    <Marksheet />
+                  </CustomErrorBoundary>
                 </RBARoute>
               }
             />
@@ -73,7 +93,9 @@ const App = () => {
               path="/marksheet/test/:testId"
               element={
                 <RBARoute roles={["ADMIN", "TEACHER"]}>
-                  <EditMarksheet />
+                  <CustomErrorBoundary>
+                    <EditMarksheet />
+                  </CustomErrorBoundary>
                 </RBARoute>
               }
             />
@@ -86,6 +108,7 @@ const App = () => {
               }
             />
           </Route>
+          <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

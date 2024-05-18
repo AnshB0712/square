@@ -1,18 +1,37 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import "./app/globals.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { AuthContextProvider } from "./context/authContext.jsx";
+import "./app/globals.css";
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error, query) => {
+      if (query.state.data !== undefined) {
+        toast.error(`Error: ${error.message ?? "Something went wrong"}`);
+      }
+    },
+  }),
   defaultOptions: {
     queries: {
       retry: (_, error) => {
-        if (error?.response?.status === 403) return false;
-        if (error?.response?.status === 404) return false;
-        if (error?.response?.status === 428) return false;
+        const DO_NOT_RETRY_STATUS = [403, 404, 428];
+        if (DO_NOT_RETRY_STATUS.includes(error.response?.status)) return false;
+
+        return true;
+      },
+      throwOnError: (error) => {
+        const STATUS_ON_NOT_TO_THROW = [401];
+
+        if (STATUS_ON_NOT_TO_THROW.includes(error.response?.status))
+          return false;
 
         return true;
       },
