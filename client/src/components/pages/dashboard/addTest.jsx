@@ -235,7 +235,7 @@ const AddTest = () => {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Standard</FormLabel>
+                        <FormLabel>Subject</FormLabel>
                         {subjectLoading ? (
                           <Loading />
                         ) : (
