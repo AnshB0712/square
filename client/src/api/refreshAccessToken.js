@@ -1,8 +1,8 @@
-import { customAxios } from "./axios";
+import { customAxios } from './axios'
 
-const refreshAccessToken = async () => {
-  const { data } = await customAxios.get("/auth/refresh-session");
-  return data.data.token;
-};
+const refreshAccessToken = async ({ fullInfo = false }) => {
+  const { data } = await customAxios.get('/auth/refresh-session')
+  return fullInfo ? data.data : data.data.token
+}
 
-export default refreshAccessToken;
+export default refreshAccessToken
