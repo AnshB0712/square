@@ -53,6 +53,7 @@ const IndividualTestMarks = () => {
       </CustomErrorBoundary>
 
       <Link
+        to="/dashboard"
         className={`${buttonVariants({
           size: 'lg',
         })} w-full`}
