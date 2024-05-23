@@ -1,19 +1,19 @@
-const { Subject } = require("../../models/subject");
-const { User } = require("../../models/user");
-const { Test } = require("../../models/test");
-const { APIError } = require("../../middlewares/errorMiddleware");
-const { StatusCodes } = require("http-status-codes");
-const { ObjectId } = require("mongoose").Types;
+const { Subject } = require('../../models/subject')
+const { User } = require('../../models/user')
+const { Test } = require('../../models/test')
+const { APIError } = require('../../utils/apiError')
+const { StatusCodes } = require('http-status-codes')
+const { ObjectId } = require('mongoose').Types
 
 const getPerformanceData = async (req, res) => {
-  const user = req.user;
-  const { subjectId } = req.params;
+  const user = req.user
+  const { subjectId } = req.params
 
-  const subject = await Subject.findById(subjectId);
-  if (!subject) throw new APIError(StatusCodes.NOT_FOUND);
+  const subject = await Subject.findById(subjectId)
+  if (!subject) throw new APIError(StatusCodes.NOT_FOUND)
 
-  const studentId = user._id;
-  const student = await User.findById(studentId).lean();
+  const studentId = user._id
+  const student = await User.findById(studentId).lean()
 
   const pipeline = [
     // Match tests for the given subjectId and standardId
@@ -26,16 +26,16 @@ const getPerformanceData = async (req, res) => {
     // Lookup marksheet for each test
     {
       $lookup: {
-        from: "marksheets",
-        localField: "_id",
-        foreignField: "test",
-        as: "marksheet",
+        from: 'marksheets',
+        localField: '_id',
+        foreignField: 'test',
+        as: 'marksheet',
       },
     },
     // Unwind to deconstruct the array from the lookup
     {
       $unwind: {
-        path: "$marksheet",
+        path: '$marksheet',
         preserveNullAndEmptyArrays: true, // Preserve tests without marksheet
       },
     },
@@ -50,17 +50,17 @@ const getPerformanceData = async (req, res) => {
       $project: {
         on: 1, // date of the test,
         marks: `$marksheet.sheet.${studentId}.marks`,
-        total: "$marksheet.fullMarksOfTest",
+        total: '$marksheet.fullMarksOfTest',
         percentage: {
           $cond: {
             if: {
               $eq: [
                 {
                   $type: {
-                    $ifNull: ["$marksheet.sheet." + studentId + ".marks", null],
+                    $ifNull: ['$marksheet.sheet.' + studentId + '.marks', null],
                   },
                 },
-                "int",
+                'int',
               ],
             },
             then: {
@@ -68,9 +68,9 @@ const getPerformanceData = async (req, res) => {
                 {
                   $divide: [
                     {
-                      $ifNull: ["$marksheet.sheet." + studentId + ".marks", 0],
+                      $ifNull: ['$marksheet.sheet.' + studentId + '.marks', 0],
                     },
-                    { $ifNull: ["$marksheet.fullMarksOfTest", 1] },
+                    { $ifNull: ['$marksheet.fullMarksOfTest', 1] },
                   ],
                 },
                 100,
@@ -86,17 +86,17 @@ const getPerformanceData = async (req, res) => {
         on: 1, // 1 for ascending order, -1 for descending order
       },
     },
-  ];
+  ]
 
-  const data = await Test.aggregate(pipeline);
+  const data = await Test.aggregate(pipeline)
 
   res.status(StatusCodes.OK).json({
-    message: "done",
+    message: 'done',
     success: true,
-    data,
-  });
-};
+    data: data.length ? data.map((d) => ({ ...d, subject: subjectId })) : data,
+  })
+}
 
 module.exports = {
   getPerformanceData,
-};
+}
