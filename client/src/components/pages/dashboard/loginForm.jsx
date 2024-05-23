@@ -208,7 +208,7 @@ export function LoginForm() {
   const from = location.state?.from?.pathname || '/dashboard'
   const login = useLogin(`auth/login/${role}`)
 
-  const { setUser } = useAuthCtx()
+  const { user, setUser } = useAuthCtx()
 
   const handleLogin = async (details) => {
     login.mutate(
