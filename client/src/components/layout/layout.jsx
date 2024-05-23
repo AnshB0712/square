@@ -1,5 +1,5 @@
-import { CircleUser, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CircleUser, Menu } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,40 +7,41 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
-import logo from "../../assets/logo.svg";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { customAxios } from "../../api/axios";
-import { toast } from "sonner";
-import { useAuthCtx } from "../../context/authContext";
+} from '@/components/ui/dropdown-menu'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Badge } from '@/components/ui/badge'
+import logo from '../../assets/logo.svg'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { customAxios } from '../../api/axios'
+import { toast } from 'sonner'
+import { useAuthCtx } from '../../context/authContext'
 
 const LogoutButton = () => {
-  const { setUser, user } = useAuthCtx();
-  const navigate = useNavigate();
+  const { setUser, user } = useAuthCtx()
+  const navigate = useNavigate()
   const handleLogout = async () => {
     try {
-      await customAxios.get("/auth/logout");
+      await customAxios.get('/auth/logout')
+      localStorage.setItem('logout', 'done')
       setUser({
-        token: "",
+        token: '',
         role: [],
-        name: "",
-      });
-      navigate("/");
-      toast("User Logged Out.", {
-        description: `${new Intl.DateTimeFormat("en-GB", {
-          dateStyle: "full",
-          timeStyle: "long",
-          timeZone: "Asia/Kolkata",
+        name: '',
+      })
+      navigate('/')
+      toast('User Logged Out.', {
+        description: `${new Intl.DateTimeFormat('en-GB', {
+          dateStyle: 'full',
+          timeStyle: 'long',
+          timeZone: 'Asia/Kolkata',
         }).format(Date.now())}`,
-      });
+      })
     } catch (error) {
-      toast("Error while Loging Out.", {
+      toast('Error while Loging Out.', {
         description: error.response.data.message,
-      });
+      })
     }
-  };
+  }
   return !user.token ? (
     <></>
   ) : (
@@ -52,11 +53,11 @@ const LogoutButton = () => {
     >
       Logout
     </Button>
-  );
-};
+  )
+}
 
 const AvatarDropdown = () => {
-  const { user } = useAuthCtx();
+  const { user } = useAuthCtx()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -75,7 +76,7 @@ const AvatarDropdown = () => {
           <Badge
             variant="outline"
             size="sm"
-            style={{ borderColor: "#7549C4", color: "#7549C4" }}
+            style={{ borderColor: '#7549C4', color: '#7549C4' }}
           >
             {user?.role?.[0]}
           </Badge>
@@ -86,8 +87,8 @@ const AvatarDropdown = () => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}
 
 export const Layout = () => {
   return (
@@ -155,5 +156,5 @@ export const Layout = () => {
         <Outlet />
       </main>
     </div>
-  );
-};
+  )
+}

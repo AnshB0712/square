@@ -221,7 +221,9 @@ export function LoginForm() {
             type: 'custom',
             message: e.response.data.message,
           }),
-        onSuccess: () => navigate(from),
+        onSuccess: () => {
+          navigate(from)
+        },
       }
     )
   }
@@ -249,7 +251,7 @@ export function LoginForm() {
       }
     }
 
-    isSessionExists()
+    !!localStorage.getItem('logout') && isSessionExists()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
