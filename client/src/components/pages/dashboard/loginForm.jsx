@@ -208,7 +208,7 @@ export function LoginForm() {
   const from = location.state?.from?.pathname || '/dashboard'
   const login = useLogin(`auth/login/${role}`)
 
-  const { user, setUser } = useAuthCtx()
+  const { setUser } = useAuthCtx()
 
   const handleLogin = async (details) => {
     login.mutate(
@@ -251,7 +251,7 @@ export function LoginForm() {
       }
     }
 
-    !!localStorage.getItem('logout') && isSessionExists()
+    localStorage.getItem('logout') ? '' : isSessionExists()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
