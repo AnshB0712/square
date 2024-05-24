@@ -251,7 +251,7 @@ export function LoginForm() {
       }
     }
 
-    localStorage.getItem('logout') ? '' : isSessionExists()
+    isSessionExists()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

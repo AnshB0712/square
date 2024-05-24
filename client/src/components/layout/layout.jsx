@@ -22,7 +22,6 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     try {
       await customAxios.get('/auth/logout')
-      localStorage.setItem('logout', 'done')
       setUser({
         token: '',
         role: [],

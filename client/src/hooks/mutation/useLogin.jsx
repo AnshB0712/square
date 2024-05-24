@@ -12,7 +12,6 @@ export const useLogin = (url) => {
   const mutate = useMutation({
     mutationFn: ({ details }) => login({ url, details }),
     onSuccess: (res) => {
-      localStorage.removeItem('logout')
       setUser(res.data.data)
     },
   })
