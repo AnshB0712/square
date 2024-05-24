@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -13,14 +13,14 @@ import {
   SelectGroup,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Loading } from "../../layout/loading.jsx";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useLogin } from "../../../hooks/mutation/useLogin.jsx";
+} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Loading } from '../../layout/loading.jsx'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useLogin } from '../../../hooks/mutation/useLogin.jsx'
 
 import {
   Form,
@@ -29,13 +29,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form'
+import refreshAccessToken from '../../../api/refreshAccessToken.js'
+import { useAuthCtx } from '../../../context/authContext.jsx'
+import { toast } from 'sonner'
 
 const FormFieldRender = ({ role, form }) => {
-  let content;
+  let content
 
   switch (role) {
-    case "teacher":
+    case 'teacher':
       content = (
         <>
           <div className="space-y-1">
@@ -54,14 +57,14 @@ const FormFieldRender = ({ role, form }) => {
                         name="uniqueField"
                         type="text"
                         className={`${
-                          form?.formState?.errors?.["uniqueField"]
-                            ? "border-red-600 text-red-600"
-                            : ""
+                          form?.formState?.errors?.['uniqueField']
+                            ? 'border-red-600 text-red-600'
+                            : ''
                         }`}
                       />
                     </FormControl>
                   </FormItem>
-                );
+                )
               }}
             />
           </div>
@@ -80,21 +83,21 @@ const FormFieldRender = ({ role, form }) => {
                         size="lg"
                         type="password"
                         className={`${
-                          form?.formState?.errors?.["password"]
-                            ? "border-red-600 text-red-600"
-                            : ""
+                          form?.formState?.errors?.['password']
+                            ? 'border-red-600 text-red-600'
+                            : ''
                         }`}
                       />
                     </FormControl>
                   </FormItem>
-                );
+                )
               }}
             />
           </div>
         </>
-      );
-      break;
-    case "admin":
+      )
+      break
+    case 'admin':
       content = (
         <>
           <div className="space-y-1">
@@ -112,14 +115,14 @@ const FormFieldRender = ({ role, form }) => {
                         size="lg"
                         type="text"
                         className={`${
-                          form?.formState?.errors?.["phone"]
-                            ? "border-red-600 text-red-600"
-                            : ""
+                          form?.formState?.errors?.['phone']
+                            ? 'border-red-600 text-red-600'
+                            : ''
                         }`}
                       />
                     </FormControl>
                   </FormItem>
-                );
+                )
               }}
             />
           </div>
@@ -138,21 +141,21 @@ const FormFieldRender = ({ role, form }) => {
                         size="lg"
                         type="password"
                         className={`${
-                          form?.formState?.errors?.["password"]
-                            ? "border-red-600 text-red-600"
-                            : ""
+                          form?.formState?.errors?.['password']
+                            ? 'border-red-600 text-red-600'
+                            : ''
                         }`}
                       />
                     </FormControl>
                   </FormItem>
-                );
+                )
               }}
             />
           </div>
         </>
-      );
-      break;
-    case "student":
+      )
+      break
+    case 'student':
       content = (
         <>
           <div className="space-y-1">
@@ -170,9 +173,9 @@ const FormFieldRender = ({ role, form }) => {
                         size="lg"
                         type="number"
                         className={`${
-                          form?.formState?.errors?.["roll"]
-                            ? "border-red-600 text-red-600"
-                            : ""
+                          form?.formState?.errors?.['roll']
+                            ? 'border-red-600 text-red-600'
+                            : ''
                         }`}
                       />
                     </FormControl>
@@ -180,27 +183,32 @@ const FormFieldRender = ({ role, form }) => {
                       Enter the unique roll that class have provided to you.
                     </FormMessage>
                   </FormItem>
-                );
+                )
               }}
             />
           </div>
         </>
-      );
-      break;
+      )
+      break
     default:
-      content = "";
+      content = ''
   }
 
-  return content;
-};
+  return content
+}
 
 export function LoginForm() {
-  const [role, setRole] = useState("");
-  const form = useForm();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/dashboard";
-  const login = useLogin(`auth/login/${role}`);
+  const [role, setRole] = useState('')
+
+  const form = useForm()
+
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const from = location.state?.from?.pathname || '/dashboard'
+  const login = useLogin(`auth/login/${role}`)
+
+  const { setUser } = useAuthCtx()
 
   const handleLogin = async (details) => {
     login.mutate(
@@ -209,19 +217,44 @@ export function LoginForm() {
       },
       {
         onError: (e) =>
-          form.setError("formError", {
-            type: "custom",
+          form.setError('formError', {
+            type: 'custom',
             message: e.response.data.message,
           }),
-        onSuccess: () => navigate(from),
+        onSuccess: () => {
+          navigate(from)
+        },
       }
-    );
-  };
+    )
+  }
+
+  // IF TOKEN EXISTS USER ROUTE TO DASHBOARD DIRECTLY
+  useEffect(() => {
+    const isSessionExists = async () => {
+      try {
+        const user = refreshAccessToken({ fullInfo: true })
+        toast.promise(user, {
+          loading: 'Session Found, logging you in.',
+          success: (data) => {
+            setUser(data)
+            navigate('/dashboard')
+            return 'Login Successful.'
+          },
+          error: 'Oops! Login again.',
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    isSessionExists()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
-    form.reset();
+    form.reset()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [role]);
+  }, [role])
 
   return (
     <Card className="mx-auto max-w-sm my-5">
@@ -252,15 +285,15 @@ export function LoginForm() {
             <form
               className="space-y-5"
               onSubmit={(e) => {
-                form.clearErrors();
-                form.handleSubmit(handleLogin)(e);
+                form.clearErrors()
+                form.handleSubmit(handleLogin)(e)
               }}
             >
               <FormFieldRender role={role} form={form} />
 
-              {form.formState.errors["formError"] && (
+              {form.formState.errors['formError'] && (
                 <p className="text-[0.8rem] font-medium italic text-red-600 text-center">
-                  Error: {form.formState.errors["formError"].message}
+                  Error: {form.formState.errors['formError'].message}
                 </p>
               )}
 
@@ -270,12 +303,12 @@ export function LoginForm() {
                 size="lg"
                 type="submit"
               >
-                {login.isPending ? <Loading /> : "Login"}
+                {login.isPending ? <Loading /> : 'Login'}
               </Button>
             </form>
           </Form>
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

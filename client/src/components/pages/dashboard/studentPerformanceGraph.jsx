@@ -4,23 +4,25 @@ import {
   SelectItem,
   SelectContent,
   Select,
-} from "@/components/ui/select";
-import { Loading } from "../../layout/loading";
-import { BarChart4 } from "lucide-react";
-import MarksChart from "./marksChart";
-import useGetEnrolledSubjects from "../../../hooks/query/useGetEnrolledSubjects";
-import { useEffect, useState } from "react";
+} from '@/components/ui/select'
+import { Loading } from '../../layout/loading'
+import { BarChart4 } from 'lucide-react'
+import MarksChart from './marksChart'
+import useGetEnrolledSubjects from '../../../hooks/query/useGetEnrolledSubjects'
+import { useEffect, useState } from 'react'
 
-const StudentPerformanceGraph = () => {
+const StudentPerformanceGraph = ({ subjectId }) => {
   const { data: enrolledSubjects, isLoading: enrolledSubjectsLoading } =
-    useGetEnrolledSubjects();
-  const [value, setValue] = useState("");
+    useGetEnrolledSubjects()
+  const [value, setValue] = useState(() => subjectId || '')
 
   useEffect(() => {
+    if (subjectId) return
+
     if (enrolledSubjects) {
-      setValue(enrolledSubjects.data.data[0]._id);
+      setValue(enrolledSubjects.data.data[0]._id)
     }
-  }, [enrolledSubjects]);
+  }, [enrolledSubjects, subjectId])
 
   return (
     <>
@@ -30,7 +32,11 @@ const StudentPerformanceGraph = () => {
           <h1 className="text-sm mb-[2px] font-medium flex items-center md:text-2xl">
             Performance Graph
           </h1>
-          <Select value={value} onValueChange={(e) => setValue(e)}>
+          <Select
+            value={value}
+            onValueChange={(e) => setValue(e)}
+            disabled={!!subjectId}
+          >
             <SelectTrigger className="w-18  ml-auto">
               <SelectValue placeholder="Subjects" />
             </SelectTrigger>
@@ -38,7 +44,7 @@ const StudentPerformanceGraph = () => {
               {enrolledSubjectsLoading ? (
                 <Loading />
               ) : (
-                enrolledSubjects.data.data.map((subject) => (
+                enrolledSubjects?.data?.data?.map((subject) => (
                   <SelectItem key={subject._id} value={subject._id}>
                     {subject.name}
                   </SelectItem>
@@ -49,11 +55,11 @@ const StudentPerformanceGraph = () => {
         </div>
 
         <div className="w-full">
-          <MarksChart value={value} />
+          <MarksChart value={subjectId || value} />
         </div>
       </article>
     </>
-  );
-};
+  )
+}
 
-export default StudentPerformanceGraph;
+export default StudentPerformanceGraph

@@ -7,6 +7,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Loading } from "../../layout/loading";
+import CustomErrorBoundary from "../../layout/errorBoundary";
 
 const LazyLoadedTable = React.lazy(() => import("./TestTable"));
 
@@ -22,9 +23,11 @@ const FullTestTable = () => {
         </div>
       </CardHeader>
       <CardContent className="px-3">
-        <React.Suspense fallback={<Loading />}>
-          <LazyLoadedTable />
-        </React.Suspense>
+        <CustomErrorBoundary>
+          <React.Suspense fallback={<Loading />}>
+            <LazyLoadedTable />
+          </React.Suspense>
+        </CustomErrorBoundary>
       </CardContent>
     </Card>
   );

@@ -78,11 +78,6 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
         id: testId,
       },
       {
-        onError: (e) =>
-          form.setError("formError", {
-            type: "custom",
-            message: e.response.data.message,
-          }),
         onSuccess: () => {
           navigate(-1);
         },
@@ -287,22 +282,22 @@ const EditTestForm = ({ data, subjects, standards, testId }) => {
                 <Button
                   disabled={updateTest.isPending || deleteTest.isPending}
                   className="w-full"
-                  type="submit"
                   size="lg"
+                  onClick={() => console.log("up")}
                 >
                   {updateTest.isPending ? <Loading /> : "Update"}
                 </Button>
-                <Button
-                  className="w-full border-red-500 text-red-500"
-                  variant="outline"
-                  onClick={handleDeleteTest}
-                  size="lg"
-                  disabled={updateTest.isPending || deleteTest.isPending}
-                >
-                  {deleteTest.isPending ? <Loading /> : "Delete Test"}
-                </Button>
               </div>
             </form>
+            <Button
+              className="w-full border-red-500 text-red-500"
+              variant="outline"
+              onClick={handleDeleteTest}
+              size="lg"
+              disabled={updateTest.isPending || deleteTest.isPending}
+            >
+              {deleteTest.isPending ? <Loading /> : "Delete Test"}
+            </Button>
           </Form>
         </div>
       </div>

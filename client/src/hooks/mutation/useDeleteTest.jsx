@@ -22,6 +22,20 @@ const useDeleteTest = () => {
       });
       queryClient.invalidateQueries({ queryKey: ["test"] });
     },
+    onError: (e) => {
+      toast.error(
+        `Error: ${
+          e?.response?.data?.message ?? e.message ?? "Something went wrong."
+        }`,
+        {
+          description: `${new Intl.DateTimeFormat("en-GB", {
+            dateStyle: "full",
+            timeStyle: "long",
+            timeZone: "Asia/Kolkata",
+          }).format(Date.now())}`,
+        }
+      );
+    },
   });
   return mutate;
 };

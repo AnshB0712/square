@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import TestTable from "./TestTable";
 import { Link } from "react-router-dom";
 import { buttonVariants } from "../../ui/button";
+import CustomErrorBoundary from "../../layout/errorBoundary";
 
 const RecentTests = () => {
   return (
@@ -26,7 +27,9 @@ const RecentTests = () => {
       </article>
       <Card>
         <CardContent className="p-2 text-center">
-          <TestTable />
+          <CustomErrorBoundary>
+            <TestTable />
+          </CustomErrorBoundary>
         </CardContent>
       </Card>
     </div>

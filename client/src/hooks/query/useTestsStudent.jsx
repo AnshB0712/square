@@ -11,7 +11,6 @@ const useTestsStudent = () => {
   const q = useQuery({
     queryKey: ["student-tests"],
     queryFn: () => getTests(axios),
-    staleTime: 10_000,
   });
   return q;
 };

@@ -36,7 +36,7 @@ const ViewTest = () => {
           <div className="space-y-1">
             <>
               <Label>Name</Label>
-              <Input size="lg" value={data.data.data.name} readonly={""} />
+              <Input size="lg" value={data.data.data.name} readOnly={""} />
             </>
           </div>
           <div className="space-y-1">

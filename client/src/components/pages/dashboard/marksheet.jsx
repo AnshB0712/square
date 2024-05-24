@@ -32,6 +32,7 @@ import useMarsksheetDetails from "../../../hooks/query/useMarsksheetDetails";
 import { Loading } from "../../layout/loading";
 import useAddMarksheet from "../../../hooks/mutation/useAddMarksheet";
 import { buttonVariants } from "../../ui/button";
+import Error from "../../layout/pageNotFound";
 
 const T = ({ testId, data, form, columns }) => {
   const [sorting, setSorting] = React.useState([]);
@@ -217,7 +218,7 @@ const T = ({ testId, data, form, columns }) => {
 
 const Marksheet = () => {
   const { testId } = useParams();
-  const { data, isLoading } = useMarsksheetDetails({ testId });
+  const { data, isLoading, isError } = useMarsksheetDetails({ testId });
 
   const form = useForm();
   const columns = React.useMemo(
@@ -272,6 +273,8 @@ const Marksheet = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  if (isError) return <Error />;
 
   if (isLoading) return <Loading />;
 
