@@ -230,7 +230,6 @@ export function LoginForm() {
 
   // IF TOKEN EXISTS USER ROUTE TO DASHBOARD DIRECTLY
   useEffect(() => {
-    let id
     const isSessionExists = async () => {
       try {
         const user = refreshAccessToken({ fullInfo: true })
@@ -245,8 +244,6 @@ export function LoginForm() {
         })
       } catch (error) {
         console.error(error)
-      } finally {
-        toast.dismiss(id)
       }
     }
 
