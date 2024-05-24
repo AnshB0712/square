@@ -241,7 +241,6 @@ export function LoginForm() {
             timeZone: 'Asia/Kolkata',
           }).format(Date.now())}`,
         })
-        await new Promise((resolve) => setTimeout(resolve, 5000))
         setUser(user)
         navigate('/dashboard')
       } catch (error) {
