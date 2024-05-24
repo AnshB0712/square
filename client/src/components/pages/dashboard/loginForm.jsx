@@ -233,16 +233,16 @@ export function LoginForm() {
     let id
     const isSessionExists = async () => {
       try {
-        const user = await refreshAccessToken({ fullInfo: true })
-        id = toast.loading('Session Found, Logging you in.', {
-          description: `${new Intl.DateTimeFormat('en-GB', {
-            dateStyle: 'full',
-            timeStyle: 'long',
-            timeZone: 'Asia/Kolkata',
-          }).format(Date.now())}`,
+        const user = refreshAccessToken({ fullInfo: true })
+        toast.promise(user, {
+          loading: 'Session Found, logging you in.',
+          success: (data) => {
+            setUser(data)
+            navigate('/dashboard')
+            return 'Login Successful.'
+          },
+          error: 'Oops! Login again.',
         })
-        setUser(user)
-        navigate('/dashboard')
       } catch (error) {
         console.error(error)
       } finally {

@@ -17,10 +17,12 @@ const StudentPerformanceGraph = ({ subjectId }) => {
   const [value, setValue] = useState(() => subjectId || '')
 
   useEffect(() => {
+    if (subjectId) return
+
     if (enrolledSubjects) {
       setValue(enrolledSubjects.data.data[0]._id)
     }
-  }, [enrolledSubjects])
+  }, [enrolledSubjects, subjectId])
 
   return (
     <>
