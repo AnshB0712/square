@@ -9,7 +9,8 @@ export default defineConfig({
     VitePWA({
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
       manifest: {
-        name: "Square App",
+        name: "Square",
+        short_name: 'Square',
         theme_color: "#FFFFFF",
         icons: [
           {
