@@ -2,13 +2,13 @@ import {
   BadgeIndianRupee,
   BetweenHorizonalStart,
   CircleHelp,
-} from "lucide-react";
-import UpcomingTests from "./upcomingTests";
-import { toast } from "sonner";
-import { Button } from "../../ui/button";
-import Sparkles from "../../layout/sparkle";
-import StudentPerformanceGraph from "./studentPerformanceGraph";
-import CustomErrorBoundary from "../../layout/errorBoundary";
+} from "lucide-react"
+import UpcomingTests from "./upcomingTests"
+import { toast } from "sonner"
+import { Button } from "../../ui/button"
+import Sparkles from "../../layout/sparkle"
+import StudentPerformanceGraph from "./studentPerformanceGraph"
+import CustomErrorBoundary from "../../layout/errorBoundary"
 
 const StudentDashboard = () => {
   return (
@@ -17,7 +17,7 @@ const StudentDashboard = () => {
         <div className="flex items-center gap-1">
           <BetweenHorizonalStart className="h-4 w-4 text-muted-foreground" />
           <h1 className="text-sm mb-[2px] font-medium flex items-center md:text-2xl">
-            Actions
+            Upcoming Tests
           </h1>
         </div>
         <div className="w-full">
@@ -77,7 +77,7 @@ const StudentDashboard = () => {
         </div>
       </article>
     </>
-  );
-};
+  )
+}
 
-export default StudentDashboard;
+export default StudentDashboard
